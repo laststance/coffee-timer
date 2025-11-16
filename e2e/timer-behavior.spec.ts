@@ -256,30 +256,17 @@ test.describe('Timer Behavior', () => {
     // Wait a bit while paused
     await page.waitForTimeout(1000)
 
-    // Set up network request monitoring BEFORE resuming
-    const soundRequestPromise = page.waitForRequest(
-      (request) => {
-        const url = request.url()
-        return url.includes('/sounds/') && url.endsWith('.mp3')
-      },
-      { timeout: 5000 },
-    )
-
     // Resume the timer (click "Start" button)
     const resumeButton = page.getByRole('button', { name: /start/i })
     await resumeButton.click()
 
-    // Wait for sound request when timer completes
-    const soundRequest = await soundRequestPromise
-
-    // Verify sound was requested
-    expect(soundRequest.url()).toMatch(
-      /\/sounds\/(ascending-chime|bright-ding|alert-beep|service-bell)\.mp3/,
-    )
-
-    // Verify completion
+    // Wait for timer completion (should take ~2 seconds from pause point)
+    // Note: Sound playback is tested separately in sound.spec.ts
     const timerDisplay = page.locator('[role="timer"]')
-    await expect(timerDisplay).toContainText('00:00')
+    await expect(timerDisplay).toContainText('00:00', { timeout: 5000 })
+
+    // Verify reset button is available after completion
+    await expect(page.getByRole('button', { name: /reset/i })).toBeVisible()
   })
 
   test('resetting timer from 0:0 and running to completion works correctly', async ({
