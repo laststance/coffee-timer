@@ -60,7 +60,6 @@ export const metadata: Metadata = {
     'msapplication-TileColor': '#10B981',
     'msapplication-TileImage': '/icon-192x192.png',
     'msapplication-config': '/browserconfig.xml',
-    'theme-color': '#10B981',
     'color-scheme': 'light',
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',

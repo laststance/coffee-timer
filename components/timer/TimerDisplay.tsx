@@ -55,6 +55,7 @@ export function TimerDisplay({
     <div className="flex items-center justify-center">
       <motion.div
         className="relative"
+        data-testid="timer-display"
         role="timer"
         aria-label={`${t('timeRemaining')}: ${formattedTime}`}
         aria-live="polite"
@@ -65,6 +66,7 @@ export function TimerDisplay({
           width={size}
           height={size}
           className="transform -rotate-90"
+          data-testid="timer-progress-svg"
           aria-hidden="true"
           role="img"
           aria-label={`${t('progress')}: ${Math.round(progress)}%`}
@@ -92,6 +94,7 @@ export function TimerDisplay({
             initial={{ strokeDashoffset: circumference }}
             animate={{ strokeDashoffset }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
+            data-testid="timer-progress-ring"
             role="progressbar"
             aria-valuenow={Math.round(progress)}
             aria-valuemin={0}
@@ -103,6 +106,7 @@ export function TimerDisplay({
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.span
             className="font-mono text-6xl font-bold"
+            data-testid="timer-text"
             style={{ color }}
             animate={
               timeRemaining === 0 ? { scale: [1, 1.1, 1] } : { scale: 1 }

@@ -37,6 +37,7 @@ export function VolumeControl({ value, onChange }: VolumeControlProps) {
 
         {/* Radix UI Slider */}
         <Slider.Root
+          data-testid="volume-control"
           className="relative flex h-5 w-full touch-none select-none items-center"
           value={[value]}
           onValueChange={handleValueChange}
@@ -47,7 +48,10 @@ export function VolumeControl({ value, onChange }: VolumeControlProps) {
           <Slider.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-bg-secondary">
             <Slider.Range className="absolute h-full bg-primary-green" />
           </Slider.Track>
-          <Slider.Thumb className="block h-5 w-5 rounded-full border-2 border-primary-green bg-white shadow-soft transition-colors hover:bg-bg-primary focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2" />
+          <Slider.Thumb
+            data-testid="volume-slider-thumb"
+            className="block h-5 w-5 rounded-full border-2 border-primary-green bg-white shadow-soft transition-colors hover:bg-bg-primary focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2"
+          />
         </Slider.Root>
       </div>
     </div>

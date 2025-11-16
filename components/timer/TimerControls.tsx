@@ -25,6 +25,7 @@ export function TimerControls({
       {!isRunning ? (
         <motion.button
           onClick={onStart}
+          data-testid="timer-start-button"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-2 rounded-full bg-primary-green min-w-[44px] min-h-[44px] px-8 py-5 text-lg font-semibold text-white shadow-soft transition-colors hover:bg-primary-green-dark focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2"
@@ -35,6 +36,7 @@ export function TimerControls({
       ) : (
         <motion.button
           onClick={onPause}
+          data-testid="timer-pause-button"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-2 rounded-full bg-accent-amber min-w-[44px] min-h-[44px] px-8 py-5 text-lg font-semibold text-white shadow-soft transition-colors hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-accent-amber focus:ring-offset-2"
@@ -47,6 +49,7 @@ export function TimerControls({
       {/* Reset Button */}
       <motion.button
         onClick={onReset}
+        data-testid="timer-reset-button"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center gap-2 rounded-full bg-gray-500 min-w-[44px] min-h-[44px] px-6 py-5 text-lg font-semibold text-white shadow-soft transition-colors hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"

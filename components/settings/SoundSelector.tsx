@@ -86,6 +86,7 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
 
       <Select.Root value={safeValue} onValueChange={onChange}>
         <Select.Trigger
+          data-testid="sound-selector"
           className="flex w-full items-center justify-between rounded-lg border-2 border-bg-secondary bg-white px-4 py-3 text-left text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
           aria-label={t('selectSound')}
         >
@@ -118,6 +119,7 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
                     {preset !== 'none' && (
                       <button
                         type="button"
+                        data-testid="sound-preview-button"
                         onPointerDown={(e) => handlePreview(e, preset)}
                         className="ml-2 rounded p-3 min-w-11 min-h-11 flex items-center justify-center text-text-primary hover:bg-bg-secondary hover:text-primary-green transition-colors"
                         aria-label={t('previewSound', {

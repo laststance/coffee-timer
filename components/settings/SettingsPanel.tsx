@@ -26,7 +26,10 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] flex max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] flex-col overflow-hidden rounded-lg bg-bg-primary shadow-lg focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
+        <Dialog.Content
+          data-testid="settings-panel"
+          className="fixed left-[50%] top-[50%] flex max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] flex-col overflow-hidden rounded-lg bg-bg-primary shadow-lg focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
+        >
           {/* Header */}
           <div className="flex items-center justify-between px-6 pt-6 pb-4">
             <Dialog.Title className="text-2xl font-bold text-text-primary">
@@ -34,6 +37,7 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             </Dialog.Title>
             <Dialog.Close asChild>
               <button
+                data-testid="settings-close-button"
                 className="rounded-full p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-green"
                 aria-label={t('close')}
               >
@@ -54,7 +58,10 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           {/* Footer */}
           <div className="flex justify-end px-6 pt-4 pb-6">
             <Dialog.Close asChild>
-              <button className="rounded-lg bg-primary-green px-6 py-3 min-h-[44px] font-semibold text-white shadow-soft transition-colors hover:bg-primary-green-dark focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2">
+              <button
+                data-testid="settings-done-button"
+                className="rounded-lg bg-primary-green px-6 py-3 min-h-[44px] font-semibold text-white shadow-soft transition-colors hover:bg-primary-green-dark focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2"
+              >
                 {t('done')}
               </button>
             </Dialog.Close>
