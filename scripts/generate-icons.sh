@@ -1,10 +1,10 @@
 #!/bin/bash
-# Icon Generation Script for Share Timer PWA
+# Icon Generation Script for Coffee Timer PWA
 # Requires: ImageMagick (brew install imagemagick on macOS)
 
 set -e
 
-echo "🎨 Generating PWA icons for Share Timer..."
+echo "🎨 Generating PWA icons for Coffee Timer..."
 
 # Check if ImageMagick is installed
 if ! command -v convert &> /dev/null; then

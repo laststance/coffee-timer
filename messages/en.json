@@ -1,6 +1,6 @@
 {
   "App": {
-    "title": "Share Timer",
+    "title": "Coffee Timer",
     "description": "Simple, relaxing timer for your daily tasks"
   },
   "Timer": {
@@ -60,7 +60,7 @@
     "testNotificationDescription": "Send a test notification to verify it's working",
     "sendTest": "Send test",
     "sending": "Sending...",
-    "testTitle": "Share Timer - Test",
+    "testTitle": "Coffee Timer - Test",
     "testBody": "Notifications are working correctly!",
     "timerCompleteTitle": "Timer Complete!",
     "timerCompleteBody": "Your timer has finished",

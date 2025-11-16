@@ -1,10 +1,10 @@
-# Share Timer Test Plan
+# Coffee Timer Test Plan
 
 _Last updated: 2025-10-08_
 
 ## 1. Objectives
 
-- Validate that the Share Timer PWA delivers reliable countdown, notification, and audio playback functionality across supported browsers and devices.
+- Validate that the Coffee Timer PWA delivers reliable countdown, notification, and audio playback functionality across supported browsers and devices.
 - Ensure the newly sourced notification sounds are unique, normalized, and selectable within the app.
 - Provide a repeatable cadence for regression and release testing, including automated and manual coverage.
 

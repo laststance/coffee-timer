@@ -149,8 +149,8 @@ Added `Notifications` section with complete translations:
 
 ```typescript
 {
-  name: 'Share Timer',
-  short_name: 'ShareTimer',
+  name: 'Coffee Timer',
+  short_name: 'CoffeeTimer',
   description: 'Simple, relaxing timer...',
   display: 'standalone',
   background_color: '#F9FAFB',
@@ -200,7 +200,7 @@ Notifications are displayed via Service Worker postMessage API rather than direc
 ## File Structure
 
 ```
-share-timer/
+coffee-timer/
 ├── app/
 │   ├── manifest.ts                      # PWA manifest (NEW)
 │   └── [locale]/

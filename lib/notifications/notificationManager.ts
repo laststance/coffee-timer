@@ -84,7 +84,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
  */
 export async function showNotification(
   options: NotificationOptions,
-  retryCount: number = 0
+  retryCount: number = 0,
 ): Promise<boolean> {
   const maxRetries = 3
   const retryDelay = 1000 // 1 second
@@ -117,20 +117,26 @@ export async function showNotification(
             console.log('[Notifications] Notification shown successfully')
             resolve(true)
           } else {
-            console.error('[Notifications] Failed to show notification:', event.data.error)
+            console.error(
+              '[Notifications] Failed to show notification:',
+              event.data.error,
+            )
             resolve(false)
           }
         }
 
-        registration.active!.postMessage({
-          type: 'SHOW_NOTIFICATION',
-          title: options.title,
-          body: options.body,
-          icon: options.icon || '/icon-192x192.png',
-          badge: options.badge || '/badge.png',
-          tag: options.tag || 'share-timer-notification',
-          url: options.url || window.location.href,
-        }, [messageChannel.port2])
+        registration.active!.postMessage(
+          {
+            type: 'SHOW_NOTIFICATION',
+            title: options.title,
+            body: options.body,
+            icon: options.icon || '/icon-192x192.png',
+            badge: options.badge || '/badge.png',
+            tag: options.tag || 'coffee-timer-notification',
+            url: options.url || window.location.href,
+          },
+          [messageChannel.port2],
+        )
       })
 
       return await notificationPromise
@@ -143,8 +149,10 @@ export async function showNotification(
 
     // Retry logic for transient failures
     if (retryCount < maxRetries) {
-      console.log(`[Notifications] Retrying notification (${retryCount + 1}/${maxRetries})...`)
-      await new Promise(resolve => setTimeout(resolve, retryDelay))
+      console.log(
+        `[Notifications] Retrying notification (${retryCount + 1}/${maxRetries})...`,
+      )
+      await new Promise((resolve) => setTimeout(resolve, retryDelay))
       return showNotification(options, retryCount + 1)
     }
 

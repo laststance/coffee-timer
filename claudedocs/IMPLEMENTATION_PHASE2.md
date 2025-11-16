@@ -240,7 +240,7 @@ Route (app)                              Size  First Load JS
 ## 📁 File Structure Added
 
 ```
-share-timer/
+coffee-timer/
 ├── lib/
 │   ├── audio/
 │   │   └── audioManager.ts      # Audio playback manager

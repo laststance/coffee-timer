@@ -8,21 +8,30 @@ import '../globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Share Timer',
-    template: '%s | Share Timer',
+    default: 'Coffee Timer',
+    template: '%s | Coffee Timer',
   },
-  description: 'Simple, relaxing timer application with web push notifications. Perfect for productivity and focus sessions.',
-  keywords: ['timer', 'productivity', 'focus', 'pomodoro', 'time management', 'web app'],
-  authors: [{ name: 'Share Timer Team' }],
-  creator: 'Share Timer',
-  publisher: 'Share Timer',
+  description:
+    'Simple, relaxing coffee timer application with web push notifications. Perfect for productivity and focus sessions.',
+  keywords: [
+    'timer',
+    'productivity',
+    'focus',
+    'pomodoro',
+    'time management',
+    'web app',
+    'coffee',
+  ],
+  authors: [{ name: 'Coffee Timer Team' }],
+  creator: 'Coffee Timer',
+  publisher: 'Coffee Timer',
   formatDetection: {
     telephone: false,
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ShareTimer',
+    title: 'CoffeeTimer',
     startupImage: [
       {
         url: '/apple-touch-icon.png',
@@ -56,7 +65,7 @@ export const metadata: Metadata = {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'ShareTimer',
+    'apple-mobile-web-app-title': 'CoffeeTimer',
   },
 }
 
@@ -72,7 +81,7 @@ export function generateStaticParams() {
 }
 
 const isSupportedLocale = (
-  value: string
+  value: string,
 ): value is (typeof routing.locales)[number] =>
   routing.locales.some((supportedLocale) => supportedLocale === value)
 

@@ -2,9 +2,10 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Share Timer',
-    short_name: 'ShareTimer',
-    description: 'Simple, relaxing timer application with web push notifications',
+    name: 'Coffee Timer',
+    short_name: 'CoffeeTimer',
+    description:
+      'Simple, relaxing coffee timer application with web push notifications',
     start_url: '/',
     scope: '/',
     display: 'standalone',
@@ -50,14 +51,14 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: '1280x720',
         type: 'image/png',
         form_factor: 'wide',
-        label: 'Share Timer - Desktop View',
+        label: 'Coffee Timer - Desktop View',
       },
       {
         src: '/screenshots/mobile-narrow.png',
         sizes: '375x812',
         type: 'image/png',
         form_factor: 'narrow',
-        label: 'Share Timer - Mobile View',
+        label: 'Coffee Timer - Mobile View',
       },
     ],
     shortcuts: [

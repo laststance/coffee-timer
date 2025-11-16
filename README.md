@@ -1,4 +1,4 @@
-# Share Timer
+# Coffee Timer
 
 シンプルで癒やしのタイマーアプリケーション / Simple and Relaxing Timer Application
 

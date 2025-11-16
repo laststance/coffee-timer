@@ -1,6 +1,6 @@
 # UI Component Designs
 
-This document contains visual component designs and implementation guides for the Share Timer application.
+This document contains visual component designs and implementation guides for the Coffee Timer application.
 
 ## 1. Circular Countdown Timer
 
@@ -169,7 +169,6 @@ Minutes: [__]  Seconds: [__]
 
 ```tsx
 import { Dialog, DialogContent } from '@radix-ui/react-dialog'
-
 ;<Dialog open={isOpen} onOpenChange={setIsOpen}>
   <DialogContent className="max-w-md p-6 bg-white rounded-lg shadow-xl">
     <h2 className="text-2xl font-bold text-emerald-600 mb-6">
@@ -222,7 +221,6 @@ import {
   SelectContent,
   SelectItem,
 } from '@radix-ui/react-select'
-
 ;<div className="space-y-2">
   <label className="text-sm font-medium text-gray-700">
     {t('settings.sound')}
@@ -278,7 +276,6 @@ Volume
 
 ```tsx
 import { Slider } from '@radix-ui/react-slider'
-
 ;<div className="space-y-2">
   <div className="flex justify-between items-center">
     <label className="text-sm font-medium text-gray-700">

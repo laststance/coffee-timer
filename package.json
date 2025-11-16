@@ -1,7 +1,7 @@
 {
-  "name": "share-timer",
+  "name": "coffee-timer",
   "version": "1.0.0",
-  "description": "Simple, relaxing timer application with web push notifications",
+  "description": "Simple, relaxing coffee timer application with web push notifications",
   "scripts": {
     "dev": "next dev --port 3009",
     "build": "next build",

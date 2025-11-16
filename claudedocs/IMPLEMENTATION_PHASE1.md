@@ -186,7 +186,7 @@ Route (app)                              Size  First Load JS
 ## 📁 File Structure
 
 ```
-share-timer/
+coffee-timer/
 ├── app/
 │   ├── globals.css          # Tailwind imports
 │   ├── layout.tsx           # Root layout

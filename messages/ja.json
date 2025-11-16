@@ -1,6 +1,6 @@
 {
   "App": {
-    "title": "シェアタイマー",
+    "title": "コーヒータイマー",
     "description": "シンプルでリラックスできる日常タスク用タイマー"
   },
   "Timer": {
@@ -60,7 +60,7 @@
     "testNotificationDescription": "テスト通知を送信して動作を確認",
     "sendTest": "テスト送信",
     "sending": "送信中...",
-    "testTitle": "シェアタイマー - テスト",
+    "testTitle": "コーヒータイマー - テスト",
     "testBody": "通知は正常に動作しています！",
     "timerCompleteTitle": "タイマー完了！",
     "timerCompleteBody": "タイマーが終了しました",

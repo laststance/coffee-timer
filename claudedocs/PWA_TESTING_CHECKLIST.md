@@ -24,7 +24,7 @@ Use this checklist to validate PWA installation and accessibility after deployin
 
 - [ ] Favicon shows in browser tab
 - [ ] App icon in OS launcher is clear and recognizable
-- [ ] About/Info shows correct app name "Share Timer"
+- [ ] About/Info shows correct app name "Coffee Timer"
 
 ### Functionality
 
@@ -257,9 +257,9 @@ pnpm test:a11y
 
 ### Tested By
 
-- Name: ******\_\_\_******
-- Date: ******\_\_\_******
-- Browser/Device: ******\_\_\_******
+- Name: **\*\***\_\_\_**\*\***
+- Date: **\*\***\_\_\_**\*\***
+- Browser/Device: **\*\***\_\_\_**\*\***
 
 ### Results
 
