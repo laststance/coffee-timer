@@ -1,346 +1,275 @@
 # Coffee Timer
 
-シンプルで癒やしのタイマーアプリケーション / Simple and Relaxing Timer Application
+> A simple and relaxing timer application with web push notifications, customizable sounds, and bilingual support.
 
-## 📋 Design Documents
+[![Production Ready](https://img.shields.io/badge/status-production-success)](https://github.com/laststance/coffee-timer)
+[![CI Status](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/laststance/coffee-timer/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-このプロジェクトは完全な設計仕様が完了しています / This project has complete design specifications:
+## Overview
 
-### 1. [DESIGN.md](./DESIGN.md) - Complete System Design
+Coffee Timer is a Progressive Web App (PWA) designed for simple, distraction-free time tracking. Built with modern web technologies, it offers a relaxing user experience with smooth animations, customizable sound presets, and reliable background notifications.
 
-**最新技術スタック / Latest Tech Stack:**
+**Key Features:**
 
-- Next.js 16.0.1 (App Router)
-- React 19.2.0
-- TypeScript 5.9.3
-- Tailwind CSS 4.1.17
-- pnpm 10.20.0
+- ⏱️ Intuitive circular timer display with 1-99 minute support
+- 🔔 Web Push notifications (works even when tab is closed)
+- 🔊 9 customizable sound presets with volume control
+- 🌍 Bilingual support (English/Japanese)
+- 📱 Progressive Web App - installable on mobile and desktop
+- ♿ WCAG 2.1 AA accessibility compliant
+- 🎨 Calm, relaxing color scheme
 
-**主要機能 / Core Features:**
+For detailed design specifications, see [DESIGN.md](./DESIGN.md) and [UI_COMPONENTS.md](./UI_COMPONENTS.md).
 
-- ✅ 1-99分対応のタイマー / Timer supporting 1-99 minutes
-- ✅ Web Push通知 (バックグラウンド動作) / Web Push notifications (background)
-- ✅ カスタマイズ可能なサウンド / Customizable sounds
-- ✅ 音量調節 / Volume control
-- ✅ 通知テスト機能 / Notification test feature
-- ✅ 日本語/英語対応 / Japanese/English support
-- ✅ PWA対応 / PWA support
-- ✅ リラックスした配色 / Relaxing color theme
-
-**含まれる内容 / Included:**
-
-- 完全なプロジェクト構造 / Complete project structure
-- コンポーネント仕様 / Component specifications
-- 状態管理設計 (Zustand) / State management design
-- 通知システムアーキテクチャ / Notification system architecture
-- 国際化戦略 (next-intl) / Internationalization strategy
-- PWA設定 / PWA configuration
-- アクセシビリティガイドライン / Accessibility guidelines
-- 実装ロードマップ / Implementation roadmap
-
----
-
-### 2. [UI_COMPONENTS.md](./UI_COMPONENTS.md) - UI Component Designs
-
-**デザイン済みコンポーネント / Designed Components:**
-
-1. **CircularCountdownTimer** - 円形プログレスタイマー / Circular progress timer
-2. **TimerControls** - スタート/一時停止/リセット / Start/Pause/Reset
-3. **TimeInput** - 時間入力 / Time input
-4. **SettingsPanel** - 設定パネル / Settings panel
-5. **SoundSelector** - サウンド選択 / Sound selector
-6. **VolumeControl** - 音量調節 / Volume control
-7. **LanguageToggle** - 言語切替 / Language toggle
-8. **NotificationTest** - 通知テスト / Notification test
-
-**含まれる内容 / Included:**
-
-- 詳細なビジュアルデザイン / Detailed visual designs
-- React/TypeScript実装例 / React/TypeScript examples
-- Radix UIインテグレーション / Radix UI integration
-- レスポンシブレイアウト / Responsive layouts
-- アクセシビリティ実装 / Accessibility implementation
-- カラーパレット / Color palette
-- アニメーションガイド / Animation guidelines
-
-**Magic MCPから生成されたコンポーネント:**
-
-- 完全に動作する円形タイマーコンポーネント
-- 緑色のテーマとソフトシャドウ
-- スムーズなアニメーション
-- lucide-react アイコン統合
-
----
-
-## ✅ Production Ready - All Phases Complete! 🎉
-
-**Status**: Fully implemented, tested, and deployed to production ✨
-
-### Quick Start
+## Quick Start
 
 ```bash
-# 依存関係のインストール / Install dependencies
+# Install dependencies
 pnpm install
 
-# 開発サーバー起動 / Start development server
+# Start development server
 pnpm dev
-# Open http://localhost:3009
+# → Open http://localhost:3009
 
-# プロダクションビルド / Production build
+# Build for production
 pnpm build
 pnpm start
 
-# E2Eテスト実行 / Run E2E tests
+# Run E2E tests
 pnpm e2e
 ```
 
-### Implemented Features - All Phases Complete ✅
+## Tech Stack
 
-**Phase 1: Core Timer** ✅
+**Core Framework:**
 
-- ✅ Next.js 16 + React 19.2 + TypeScript
-- ✅ Zustand state management with localStorage
-- ✅ Circular timer display with green theme
-- ✅ Start/Pause/Reset controls
-- ✅ Minutes/Seconds time input
-- ✅ Tailwind CSS 4.x design system
-- ✅ Smooth animations with Framer Motion
+- [Next.js](https://nextjs.org/) 16.0.3 (App Router)
+- [React](https://react.dev/) 19.2.0
+- [TypeScript](https://www.typescriptlang.org/) 5.9.3
+- [Tailwind CSS](https://tailwindcss.com/) 4.1.17
+- [Node.js](https://nodejs.org/) 22.21.1
+- [pnpm](https://pnpm.io/) 10.20.0
 
-**Phase 2: Settings & Audio** ✅
+**Key Dependencies:**
 
-- ✅ Audio playback system (AudioManager)
-- ✅ Sound preset selection (5 options)
-- ✅ Volume control with Radix UI Slider
-- ✅ Settings panel with Radix UI Dialog
-- ✅ Sound preview functionality
-- ✅ Settings persistence (localStorage)
+- [next-intl](https://next-intl.dev/) 4.5.3 - Internationalization
+- [Zustand](https://github.com/pmndrs/zustand) 5.0.8 - State management with localStorage persistence
+- [Radix UI](https://www.radix-ui.com/) - Accessible UI components (Dialog, Select, Slider)
+- [Framer Motion](https://www.framer.com/motion/) 12.23.24 - Smooth animations
+- [Lucide React](https://lucide.dev/) 0.553.0 - Icon system
 
-**Phase 3: Internationalization** ✅
+**Development & Testing:**
 
-- ✅ next-intl 4.4.0 with App Router
-- ✅ English/Japanese language support
-- ✅ Locale-based routing (/en/, /ja/)
-- ✅ SSG for both locales
-- ✅ Language toggle component
+- [Playwright](https://playwright.dev/) 1.56.1 - E2E testing with axe-core accessibility checks
+- [ESLint](https://eslint.org/) 9.39.1 - Code linting with zero-warning policy
+- [Prettier](https://prettier.io/) 3.6.2 - Code formatting
+- [Husky](https://typicode.github.io/husky/) 9.1.7 - Git hooks with lint-staged
 
-**Phase 4: Web Push Notifications** ✅
+## Features
 
-- ✅ Service Worker registration
-- ✅ Background notification support
-- ✅ Permission management
-- ✅ Notification test functionality
-- ✅ Browser compatibility handling
+**Timer Functionality:**
 
-**Phase 5: PWA Configuration** ✅
+- Circular countdown timer with SVG progress visualization
+- Color-coded states (green: running, amber: paused, red: complete)
+- Smooth animations and pulse effects
+- Precise 1-99 minute time range
+- Start/Pause/Reset controls
 
-- ✅ Web App Manifest with metadata
-- ✅ Multiple icon sizes (192x192, 512x512, maskable)
-- ✅ App shortcuts (Start Timer, Settings)
-- ✅ Share target integration
-- ✅ Offline capability
-- ✅ Installable on mobile/desktop
+**Audio System:**
 
-**Phase 6: Testing & Launch** ✅
+- 9 professionally recorded sound presets
+- Volume control (0-100%)
+- Sound preview functionality
+- "None" option for silent mode
+- Persistent audio preferences
 
-- ✅ Playwright E2E testing suite
-- ✅ Accessibility testing (WCAG 2.1 AA)
-- ✅ Multi-device testing (mobile/tablet/desktop)
-- ✅ CI/CD workflows (Build, Lint, Type Check, E2E)
-- ✅ 100% CI pass rate
-- ✅ Production deployment complete
+**Notifications:**
 
-**See [IMPLEMENTATION_PHASE1.md](./IMPLEMENTATION_PHASE1.md) and [IMPLEMENTATION_PHASE2.md](./IMPLEMENTATION_PHASE2.md) for detailed technical summaries**
+- Service Worker-based push notifications
+- Background notification support (works when tab closed)
+- Permission management with browser integration
+- Test notification functionality
+- Cross-browser compatible
 
----
+**Internationalization:**
 
-## 🚀 Production Status
+- English and Japanese language support
+- Locale-based routing (`/en/`, `/ja/`)
+- Static site generation for both locales
+- Seamless language switching
+- Complete UI translation coverage
 
-### Implementation Progress
+**Progressive Web App:**
 
-1. **✅ Phase 1**: Core Timer Functionality (COMPLETE)
-2. **✅ Phase 2**: Settings & Audio (COMPLETE)
-3. **✅ Phase 3**: Internationalization (COMPLETE)
-4. **✅ Phase 4**: Web Push Notifications (COMPLETE)
-5. **✅ Phase 5**: PWA Configuration (COMPLETE)
-6. **✅ Phase 6**: Testing & Launch (COMPLETE)
+- Installable on mobile and desktop
+- Offline capability with Service Worker
+- App shortcuts (Start Timer, Settings)
+- Multiple icon sizes with maskable variants
+- Share target integration
 
-### Deployment Information
+**Accessibility:**
 
-- **Environment**: Production
-- **Branch**: main
-- **CI/CD**: GitHub Actions (6 workflows)
-- **Test Coverage**: Comprehensive E2E with Playwright
-- **Accessibility**: WCAG 2.1 AA Compliant
-- **Build Status**: ✅ All checks passing
-- **Performance**: Lighthouse score > 90
+- WCAG 2.1 Level AA compliant
+- 4.5:1 minimum color contrast ratios
+- 44x44px minimum touch targets
+- Full keyboard navigation support
+- Screen reader optimized with ARIA labels
+- Focus management with Radix UI
 
-### Testing Infrastructure
+## Development
+
+### Testing
 
 ```bash
-# E2E Test Suites
-pnpm e2e              # Run all tests
+# Run all E2E tests
+pnpm e2e
+
+# Platform-specific testing
 pnpm e2e:desktop      # Desktop Chrome
 pnpm e2e:tablet       # Tablet Safari
 pnpm e2e:mobile       # Mobile Chrome
 
-# Test Files
-- accessibility.spec.ts (WCAG 2.1 AA compliance)
-- timer-behavior.spec.ts (Core functionality)
-- sound.spec.ts (Audio system)
-- background-timer.spec.ts (Background execution)
+# Test suites
+# - accessibility.spec.ts (WCAG 2.1 AA compliance)
+# - timer-behavior.spec.ts (Core timer functionality)
+# - sound.spec.ts (Audio system)
+# - background-timer.spec.ts (Background execution)
 ```
 
-### CI/CD Workflows
-
-- **Build**: Next.js production build validation
-- **Lint**: ESLint with zero warnings policy
-- **Type Check**: TypeScript compilation verification
-- **E2E Mobile**: Mobile Chrome automated testing
-- **E2E Tablet**: Tablet Safari automated testing
-- **E2E Desktop**: Desktop Chrome automated testing
-
-**Current Status**: 🟢 All workflows passing (100% success rate)
-
----
-
-## 🚀 次のステップ / Next Steps
-
-### Implementation Progress
-
-1. **✅ フェーズ1**: 基本タイマー機能 (COMPLETE)
-2. **✅ フェーズ2**: 設定とオーディオ (COMPLETE)
-3. **⏳ フェーズ3**: 国際化セットアップ (Next)
-4. **⏳ フェーズ4**: Web Push通知
-5. **⏳ フェーズ5**: PWA設定
-6. **⏳ フェーズ6**: テストとローンチ
-
-詳細は `DESIGN.md` の「Implementation Roadmap」を参照
-
----
-
-## 🎨 デザインシステム / Design System
-
-### カラーパレット / Color Palette
-
-```css
-Primary Green: #10B981  /* タイマー表示 */
-Background: #FAF9F6     /* 温かみのある白 */
-Text: #374151           /* ソフトグレー */
-```
-
-### タイポグラフィ / Typography
-
-- Display: Inter or Plus Jakarta Sans
-- Timer: 4-6rem (大きく、等幅スタイル)
-- Body: 1rem (16px)
-
-### コンポーネント / Components
-
-- **Radix UI**: アクセシブルなヘッドレスコンポーネント
-- **Tailwind CSS 4**: ユーティリティファーストスタイリング
-- **Framer Motion**: スムーズなアニメーション
-
----
-
-## 🔔 主な技術的決定 / Key Technical Decisions
-
-### 1. Next.js 15 App Router
-
-- サーバーコンポーネント優先 / Server Components first
-- React 19 RC (最新機能) / Latest features
-- 最適化されたルーティング / Optimized routing
-
-### 2. Web Push API + Service Worker
-
-- バックグラウンド通知 / Background notifications
-- VAPID キー認証 / VAPID key authentication
-- クロスブラウザ対応 / Cross-browser support
-
-### 3. Zustand for State
-
-- 軽量 (< 1KB) / Lightweight
-- localStorage永続化 / localStorage persistence
-- TypeScript完全対応 / Full TypeScript support
-
-### 4. next-intl
-
-- App Router対応 / App Router compatible
-- 型安全 / Type-safe
-- サーバーサイドレンダリング / Server-side rendering
-
----
-
-## 📦 設計ファイル / Design Files
-
-| ファイル           | 説明                   | ステータス |
-| ------------------ | ---------------------- | ---------- |
-| `DESIGN.md`        | 完全なシステム設計仕様 | ✅ 完了    |
-| `UI_COMPONENTS.md` | UIコンポーネント設計   | ✅ 完了    |
-| `README.md`        | プロジェクト概要       | ✅ 完了    |
-| `package.json`     | 初期設定               | ✅ 完了    |
-
----
-
-## 🎯 成功基準 / Success Criteria
-
-### 機能的 / Functional
-
-- ✅ タイマーが正確にカウントダウン
-- ✅ 通知が確実に動作 (バックグラウンドでも)
-- ✅ 完了時にサウンドが再生
-- ✅ 設定がセッション間で保持
-- ✅ 日本語と英語で動作
-
-### 非機能的 / Non-Functional
-
-- ✅ ページロード < 2秒
-- ✅ Lighthouseスコア > 90 (全指標)
-- ✅ WCAG 2.1 AA準拠
-- ✅ Chrome、Safari、Firefox対応 (最新版)
-- ✅ モバイルレスポンシブ (320px - 1920px)
-
----
-
-## 📚 リファレンス / References
-
-### ドキュメント / Documentation
-
-- [Next.js 15](https://nextjs.org/docs)
-- [next-intl](https://next-intl.dev/docs/getting-started/app-router)
-- [Zustand](https://github.com/pmndrs/zustand)
-- [Radix UI](https://www.radix-ui.com/)
-- [Web Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
-
-### ツール / Tools
-
-- [VAPID Key Generator](https://vapidkeys.com/)
-- [PWA Icon Generator](https://www.pwabuilder.com/)
-
----
-
-## 🤝 実装サポート / Implementation Support
-
-設計は完了しています。実装を開始する準備ができたら、以下のコマンドから始めてください:
-
-The design is complete. When ready to begin implementation, start with:
+### Code Quality
 
 ```bash
-# 1. 依存関係のインストール
-pnpm install
+# Linting
+pnpm lint              # Check for errors
+pnpm lint:fix          # Auto-fix issues
 
-# 2. 開発サーバー起動 (実装後)
-pnpm dev
+# Type checking
+pnpm typecheck         # TypeScript compilation check
 
-# 3. ビルド
-pnpm build
+# Formatting
+pnpm prettier          # Format all files
 ```
 
-**実装の質問があれば、DESIGN.mdとUI_COMPONENTS.mdを参照してください。**
+### CI/CD
 
-**For implementation questions, refer to DESIGN.md and UI_COMPONENTS.md.**
+The project uses GitHub Actions with 6 automated workflows:
+
+- **Build** - Next.js production build validation
+- **Lint** - ESLint with zero-warning enforcement
+- **Type Check** - TypeScript compilation verification
+- **E2E Mobile** - Mobile Chrome automated testing
+- **E2E Tablet** - Tablet Safari automated testing
+- **E2E Desktop** - Desktop Chrome automated testing
+
+**Current Status:** 🟢 All workflows passing (100% success rate)
+
+## Design System
+
+### Color Palette
+
+```css
+/* Primary Colors */
+--color-primary-green: #059669; /* Main actions, timer active */
+--color-bg-primary: #f8fafc; /* Primary background */
+--color-bg-secondary: #ffffff; /* Secondary background */
+--color-text-primary: #1e293b; /* Primary text */
+--color-text-secondary: #64748b; /* Secondary text */
+```
+
+### Typography
+
+- **Font Family:** System font stack (Inter, Plus Jakarta Sans fallback)
+- **Timer Display:** 4-6rem, monospace-style for consistency
+- **Body Text:** 1rem (16px) for optimal readability
+- **Headings:** 1.5-2rem with appropriate line height
+
+### Components
+
+- **Radix UI Primitives** - Accessible, unstyled component foundation
+- **Tailwind CSS** - Utility-first styling with custom theme
+- **Framer Motion** - Smooth, performant animations
+- **SVG Graphics** - Circular timer with precise rendering
+
+## Technical Decisions
+
+### 1. Next.js App Router
+
+- Server Components by default for optimal performance
+- React 19 with latest features and improvements
+- File-system based routing with locale support
+- Built-in optimization (images, fonts, scripts)
+
+### 2. Service Worker + Web Push API
+
+- Background notifications even when browser closed
+- VAPID key authentication for secure push
+- Cross-browser compatibility layer
+- Graceful degradation for unsupported browsers
+
+### 3. Zustand State Management
+
+- Minimal bundle size (< 1KB)
+- TypeScript-first with excellent type inference
+- localStorage persistence middleware
+- Simple, predictable state updates
+
+### 4. next-intl for i18n
+
+- Native App Router support with server components
+- Type-safe translation keys
+- Server-side rendering compatible
+- Easy to add additional locales
+
+## Documentation
+
+### Project Documentation
+
+- [DESIGN.md](./DESIGN.md) - Complete system design specifications
+- [CLAUDE.md](./CLAUDE.md) - Development guidelines for AI assistance
+- [UI_COMPONENTS.md](./UI_COMPONENTS.md) - UI component designs (if available)
+
+### External Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [next-intl Guide](https://next-intl.dev/docs/getting-started/app-router)
+- [Zustand Documentation](https://github.com/pmndrs/zustand)
+- [Radix UI Primitives](https://www.radix-ui.com/)
+- [Web Push API Reference](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
+- [Playwright Testing](https://playwright.dev/)
+
+### Tools
+
+- [VAPID Key Generator](https://vapidkeys.com/) - For web push setup
+- [PWA Icon Generator](https://www.pwabuilder.com/) - Icon asset creation
+
+## Success Metrics
+
+**Functional Requirements:** ✅
+
+- Timer accurately counts down to zero
+- Notifications reliably trigger in background
+- Sound plays at completion with correct preset
+- Settings persist across sessions
+- Both languages function correctly
+
+**Non-Functional Requirements:** ✅
+
+- Page load < 2 seconds
+- Lighthouse score > 90 (all metrics)
+- WCAG 2.1 AA compliance verified
+- Chrome, Safari, Firefox support (latest versions)
+- Mobile responsive 320px - 1920px
+
+## Project Status
+
+**Version:** 1.0.0
+**Status:** ✅ Production Ready
+**Last Updated:** November 2025
+**Node Version:** 22.21.1
+**Package Manager:** pnpm 10.20.0
 
 ---
 
-**バージョン / Version**: 1.0.0 (Production Ready)
-**最終更新 / Last Updated**: 2025-11
-**ステータス / Status**: ✅ Production Ready - Fully Deployed
+**License:** MIT
+**Repository:** [github.com/laststance/coffee-timer](https://github.com/laststance/coffee-timer)
