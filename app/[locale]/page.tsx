@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { Settings } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useTimerStore } from '@/lib/stores/timerStore'
@@ -43,6 +43,21 @@ export default function Home() {
   const previousTimeRef = useRef(timeRemaining)
   const userSetTimeRef = useRef(false)
 
+  // Initialize AudioContext and preload sound on timer start (user interaction)
+  const handleStart = useCallback(async () => {
+    // Initialize AudioContext (satisfies browser autoplay policy)
+    await audioManager.initialize()
+
+    // Preload current sound preset for instant playback
+    const currentPreset = useSettingsStore.getState().soundPreset
+    if (currentPreset !== 'none') {
+      await audioManager.preload(currentPreset)
+    }
+
+    // Start the timer
+    useTimerStore.getState().start()
+  }, [])
+
   // Track when user manually sets time
   useEffect(() => {
     // When initialTime changes, it means user called setTime()
@@ -55,6 +70,15 @@ export default function Home() {
       userSetTimeRef.current = false
     }
   }, [isRunning])
+
+  // Preload sound when preset changes (if AudioContext initialized)
+  useEffect(() => {
+    if (soundPreset !== 'none') {
+      audioManager.preload(soundPreset).catch((error) => {
+        console.error('[Timer] Failed to preload sound:', error)
+      })
+    }
+  }, [soundPreset])
 
   // Set up interval for ticking when timer is running
   useEffect(() => {
@@ -150,7 +174,7 @@ export default function Home() {
 
         {/* Timer Controls */}
         <TimerControls
-          onStart={start}
+          onStart={handleStart}
           onPause={pause}
           onReset={reset}
           isRunning={isRunning}

@@ -40,14 +40,17 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
    * @param e - Mouse event to prevent default select behavior
    * @param preset - The sound preset to preview
    */
-  const handlePreview = (e: React.MouseEvent, preset: SoundPreset) => {
+  const handlePreview = async (e: React.MouseEvent, preset: SoundPreset) => {
     e.preventDefault()
     e.stopPropagation()
+
+    // Initialize AudioContext on first preview (user interaction)
+    await audioManager.initialize()
 
     setPreviewingSound(preset)
     setPreviewProgress(0)
 
-    audioManager.play(preset, volume, (progress) => {
+    await audioManager.play(preset, volume, (progress) => {
       setPreviewProgress(progress)
 
       // Reset state when playback completes
