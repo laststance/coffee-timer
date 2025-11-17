@@ -1,11 +1,11 @@
 import type { SoundPreset } from '../stores/settingsStore'
 
 export const SUPPORTED_SOUND_PRESETS = [
+  'ascending-chime',
   'bright-ding',
   'double-ping',
   'service-bell',
   'alert-beep',
-  'ascending-chime',
   'notification-pop',
   'cheerful-chirp',
   'urgent-alert',
