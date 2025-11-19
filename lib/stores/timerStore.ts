@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { MAX_TIMER_TOTAL_SECONDS } from '@/lib/constants/time'
 
 interface TimerState {
   // State
@@ -32,7 +33,10 @@ export const useTimerStore = create<TimerState>()(
 
       // Actions
       setTime: (minutes: number, seconds: number) => {
-        const totalSeconds = minutes * 60 + seconds
+        const totalSeconds = Math.max(
+          0,
+          Math.min(MAX_TIMER_TOTAL_SECONDS, minutes * 60 + seconds),
+        )
         set({
           timeRemaining: totalSeconds,
           initialTime: totalSeconds,

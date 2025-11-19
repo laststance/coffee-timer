@@ -60,6 +60,22 @@ test.describe('Timer Behavior', () => {
     await page.evaluate(() => localStorage.clear())
   })
 
+  test('minutes input allows up to 24 hours and clamps anything higher', async ({
+    page,
+  }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
+    const timerDisplay = page.locator('[role="timer"]')
+
+    await minutesInput.click()
+    await minutesInput.fill('2000')
+
+    await expect(minutesInput).toHaveValue('1440', { timeout: 2000 })
+    await expect(timerDisplay).toContainText('1440:00')
+  })
+
   test('setting timer to 0:0 manually does not trigger completion', async ({
     page,
   }) => {

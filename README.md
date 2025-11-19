@@ -12,7 +12,7 @@ Coffee Timer is a Progressive Web App (PWA) designed for simple, distraction-fre
 
 **Key Features:**
 
-- ⏱️ Intuitive circular timer display with 1-99 minute support
+- ⏱️ Intuitive circular timer display with up to 24-hour sessions
 - 🔔 Web Push notifications (works even when tab is closed)
 - 🔊 9 customizable sound presets with volume control
 - 🌍 Bilingual support (English/Japanese)
@@ -73,7 +73,7 @@ pnpm e2e
 - Circular countdown timer with SVG progress visualization
 - Color-coded states (green: running, amber: paused, red: complete)
 - Smooth animations and pulse effects
-- Precise 1-99 minute time range
+- Precise time range from quick sessions to full 24-hour brews
 - Start/Pause/Reset controls
 
 **Audio System:**

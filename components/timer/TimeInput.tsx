@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { MAX_TIMER_MINUTES } from '@/lib/constants/time'
 
 interface TimeInputProps {
   onTimeChange: (minutes: number, seconds: number) => void
@@ -19,7 +20,7 @@ export function TimeInput({
 
   const handleMinutesChange = (value: string) => {
     const num = parseInt(value) || 0
-    const clamped = Math.max(0, Math.min(99, num))
+    const clamped = Math.max(0, Math.min(MAX_TIMER_MINUTES, num))
     onTimeChange(clamped, initialSeconds)
   }
 
@@ -43,7 +44,7 @@ export function TimeInput({
           id="minutes"
           type="number"
           min="0"
-          max="99"
+          max={MAX_TIMER_MINUTES}
           value={initialMinutes}
           onChange={(e) => handleMinutesChange(e.target.value)}
           disabled={disabled}

@@ -14,7 +14,7 @@
 
 ### Functional Requirements
 
-- ✅ Timer for minutes to tens of minutes (1-99 minutes supported)
+- ✅ Timer supports intervals from 1 minute up to 24 hours (1,440 minutes)
 - ✅ Green-themed timer display (primary visual element)
 - ✅ Web Push notifications on timer completion
 - ✅ Sound alerts with multiple presets + "None" option
@@ -264,7 +264,7 @@ interface TimeInputProps {
 
 **Design**:
 
-- Two number inputs: Minutes (0-99), Seconds (0-59)
+- Two number inputs: Minutes (0-1440), Seconds (0-59)
 - Large touch-friendly inputs
 - Clear labels (i18n)
 - Validation feedback
