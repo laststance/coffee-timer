@@ -4,12 +4,14 @@ import { useState } from 'react'
 import { Bell, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
+import { useSettingsStore } from '@/lib/stores/settingsStore'
 import useStore from '@/lib/hooks/useStore'
 import {
   requestNotificationPermission,
   showNotification,
   isNotificationSupported,
 } from '@/lib/notifications/notificationManager'
+import { audioManager } from '@/lib/audio/audioManager'
 
 /**
  * NotificationTest Component
@@ -20,6 +22,9 @@ export function NotificationTest() {
   const notificationState = useStore(useNotificationStore, (state) => state)
   const permission = notificationState?.permission ?? 'default'
   const setPermission = notificationState?.setPermission ?? (() => {})
+  const settingsState = useStore(useSettingsStore, (state) => state)
+  const soundPreset = settingsState?.soundPreset ?? 'ascending-chime'
+  const volume = settingsState?.volume ?? 70
   const [isRequesting, setIsRequesting] = useState(false)
   const [isSending, setIsSending] = useState(false)
 
@@ -38,6 +43,10 @@ export function NotificationTest() {
   const handleTestNotification = async () => {
     setIsSending(true)
     try {
+      // Play sound
+      audioManager.play(soundPreset, volume)
+
+      // Show notification
       const success = await showNotification({
         title: t('testTitle'),
         body: t('testBody'),
