@@ -21,7 +21,7 @@ export function LanguageToggle() {
       <Languages className="h-5 w-5 text-text-secondary" />
       <Select.Root value={locale} onValueChange={handleLocaleChange}>
         <Select.Trigger
-          className="flex items-center gap-2 rounded-lg border-2 border-bg-secondary bg-white min-w-[44px] min-h-[44px] px-4 py-3 text-sm text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
+          className="flex items-center gap-2 rounded-lg border-2 border-bg-secondary bg-bg-primary min-w-[44px] min-h-[44px] px-4 py-3 text-sm text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
           aria-label={t('label')}
         >
           <Select.Value>{t(locale as 'en' | 'ja')}</Select.Value>
@@ -32,7 +32,7 @@ export function LanguageToggle() {
 
         <Select.Portal>
           <Select.Content
-            className="overflow-hidden rounded-lg border-2 border-bg-secondary bg-white shadow-lg"
+            className="overflow-hidden rounded-lg border-2 border-bg-secondary bg-bg-primary shadow-lg"
             position="popper"
             sideOffset={5}
           >

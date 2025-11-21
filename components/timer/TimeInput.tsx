@@ -49,7 +49,7 @@ export function TimeInput({
           onChange={(e) => handleMinutesChange(e.target.value)}
           disabled={disabled}
           data-testid="time-input-minutes"
-          className="w-24 rounded-lg border-2 border-bg-secondary bg-white px-4 py-3 text-center text-2xl font-semibold text-text-primary shadow-soft transition-colors focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-24 rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-center text-2xl font-semibold text-text-primary shadow-soft transition-colors focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 
@@ -73,7 +73,7 @@ export function TimeInput({
           onChange={(e) => handleSecondsChange(e.target.value)}
           disabled={disabled}
           data-testid="time-input-seconds"
-          className="w-24 rounded-lg border-2 border-bg-secondary bg-white px-4 py-3 text-center text-2xl font-semibold text-text-primary shadow-soft transition-colors focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-24 rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-center text-2xl font-semibold text-text-primary shadow-soft transition-colors focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
     </div>

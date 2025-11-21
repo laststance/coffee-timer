@@ -77,7 +77,7 @@ export function TimerDisplay({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#E5E7EB"
+            stroke="var(--color-circle-bg)"
             strokeWidth={strokeWidth}
           />
           {/* Progress circle */}
