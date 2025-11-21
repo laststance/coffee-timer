@@ -9,24 +9,24 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          green: '#047857',
-          'green-dark': '#065F46',
+          green: 'var(--color-primary-green)',
+          'green-dark': 'var(--color-primary-green-dark)',
         },
         bg: {
-          primary: '#FAF9F6',
-          secondary: '#F3F4F6',
+          primary: 'var(--color-bg-primary)',
+          secondary: 'var(--color-bg-secondary)',
         },
         text: {
-          primary: '#374151',
-          secondary: '#6B7280',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
         },
         accent: {
-          blue: '#60A5FA',
-          amber: '#FBBF24',
+          blue: 'var(--color-accent-blue)',
+          amber: 'var(--color-accent-amber)',
         },
       },
       boxShadow: {
-        soft: '0 4px 6px -1px rgb(0 0 0 / 0.05)',
+        soft: 'var(--shadow-soft)',
       },
     },
   },

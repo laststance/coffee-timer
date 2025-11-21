@@ -87,7 +87,7 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
       <Select.Root value={safeValue} onValueChange={onChange}>
         <Select.Trigger
           data-testid="sound-selector"
-          className="flex w-full items-center justify-between rounded-lg border-2 border-bg-secondary bg-white px-4 py-3 text-left text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
+          className="flex w-full items-center justify-between rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-left text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
           aria-label={t('selectSound')}
         >
           <Select.Value>{currentLabel}</Select.Value>
@@ -98,7 +98,7 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
 
         <Select.Portal>
           <Select.Content
-            className="overflow-auto max-h-48 md:max-h-64 rounded-lg border-2 border-bg-secondary bg-white shadow-lg"
+            className="overflow-auto max-h-48 md:max-h-64 rounded-lg border-2 border-bg-secondary bg-bg-primary shadow-lg"
             position="popper"
             sideOffset={5}
           >

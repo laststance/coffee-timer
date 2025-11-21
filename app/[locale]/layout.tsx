@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { ServiceWorkerRegistration } from '@/components/notifications/ServiceWorkerRegistration'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -108,12 +109,19 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={resolvedLocale}>
+    <html lang={resolvedLocale} suppressHydrationWarning>
       <body className="bg-bg-primary text-text-primary antialiased">
-        <ServiceWorkerRegistration />
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <ThemeProvider
+          attribute="data-theme"
+          defaultTheme="coffee"
+          enableSystem
+          themes={['light', 'dark', 'coffee']}
+        >
+          <ServiceWorkerRegistration />
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

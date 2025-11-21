@@ -25,7 +25,15 @@
     "volume": "音量",
     "selectSound": "サウンドを選択",
     "previewSound": "{sound}をプレビュー",
-    "previewProgress": "サウンドプレビューの進捗"
+    "previewProgress": "サウンドプレビューの進捗",
+    "theme": "テーマ",
+    "selectTheme": "テーマを選択",
+    "Themes": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "coffee": "コーヒー",
+      "system": "システム"
+    }
   },
   "SoundPresets": {
     "bright-ding": "ブライトディング",

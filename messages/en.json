@@ -25,7 +25,15 @@
     "volume": "Volume",
     "selectSound": "Select sound",
     "previewSound": "Preview {sound}",
-    "previewProgress": "Sound preview progress"
+    "previewProgress": "Sound preview progress",
+    "theme": "Theme",
+    "selectTheme": "Select theme",
+    "Themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "coffee": "Coffee",
+      "system": "System"
+    }
   },
   "SoundPresets": {
     "bright-ding": "Bright Ding",
