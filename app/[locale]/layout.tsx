@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { ServiceWorkerRegistration } from '@/components/notifications/ServiceWorkerRegistration'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeColorUpdater } from '@/components/ThemeColorUpdater'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -69,11 +70,34 @@ export const metadata: Metadata = {
   },
 }
 
+/**
+ * Viewport Configuration
+ *
+ * The themeColor here generates the initial <meta name="theme-color"> tag
+ * in the HTML <head>. This provides the default browser chrome color.
+ *
+ * IMPORTANT: This is the INITIAL value loaded on page load.
+ * For DYNAMIC theme color updates when users switch themes, see:
+ * - components/ThemeColorUpdater.tsx (updates meta tag on theme change)
+ *
+ * Set to coffee theme (#5d4037) to match:
+ * - app/manifest.ts theme_color (PWA install default)
+ * - ThemeProvider defaultTheme="coffee" (app default theme)
+ * - app/globals.css [data-theme='coffee'] primary color
+ *
+ * Theme color mapping:
+ * - Coffee (default): #5d4037 (espresso brown)
+ * - Dark: #10b981 (bright green)
+ * - Light: #047857 (darker green)
+ *
+ * Previous value: '#10B981' (dark theme green - mismatch)
+ * Current value: '#5d4037' (coffee theme - correct default)
+ */
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#10B981',
+  themeColor: '#5d4037',
 }
 
 export function generateStaticParams() {
@@ -117,6 +141,12 @@ export default async function LocaleLayout({
           enableSystem
           themes={['light', 'dark', 'coffee']}
         >
+          {/*
+            ThemeColorUpdater: Dynamically updates browser theme-color meta tag
+            when users switch between themes. See component documentation for
+            technical details and browser support information.
+          */}
+          <ThemeColorUpdater />
           <ServiceWorkerRegistration />
           <NextIntlClientProvider messages={messages}>
             {children}

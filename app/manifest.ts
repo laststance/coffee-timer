@@ -11,7 +11,30 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     orientation: 'portrait',
     background_color: '#F9FAFB',
-    theme_color: '#10B981',
+    /**
+     * Theme Color Configuration
+     *
+     * Set to coffee theme default (#5d4037 - espresso brown) to match
+     * the app's default theme and provide a consistent warm, coffee-inspired
+     * appearance when the PWA is installed.
+     *
+     * IMPORTANT: This value is STATIC and loaded at PWA installation time.
+     * After installation, changing this value requires users to REINSTALL
+     * the PWA to see the updated title bar color.
+     *
+     * For dynamic theme color updates in browser/web view, see:
+     * - components/ThemeColorUpdater.tsx (runtime meta tag updates)
+     * - app/[locale]/layout.tsx viewport.themeColor (initial meta tag)
+     *
+     * Theme color mapping:
+     * - Coffee (default): #5d4037 (espresso brown)
+     * - Dark: #10b981 (bright green)
+     * - Light: #047857 (darker green)
+     *
+     * Previous value: '#10B981' (dark theme green - mismatch with default)
+     * Current value: '#5d4037' (coffee theme - matches app default)
+     */
+    theme_color: '#5d4037',
     categories: ['productivity', 'utilities', 'lifestyle'],
     icons: [
       {
