@@ -28,7 +28,7 @@ export default function manifest(): MetadataRoute.Manifest {
      *
      * Theme color mapping:
      * - Coffee (default): #5d4037 (espresso brown)
-     * - Dark: #10b981 (bright green)
+     * - Dark: #000000 (black)
      * - Light: #047857 (darker green)
      *
      * Previous value: '#10B981' (dark theme green - mismatch with default)

@@ -55,9 +55,9 @@
  *   - Provides good contrast on light backgrounds
  *   - Professional and clean appearance
  *
- * - **Dark Theme**: #10b981 (Bright emerald green)
- *   - High visibility on dark backgrounds
- *   - Maintains brand consistency
+ * - **Dark Theme**: #000000 (Black)
+ *   - Clean dark header for PWA
+ *   - Provides strong contrast in dark mode
  *
  * - **Coffee Theme**: #5d4037 (Espresso brown) ← DEFAULT
  *   - Warm, coffee-inspired color
@@ -118,12 +118,12 @@ import { useTheme } from 'next-themes'
  *
  * Colors match the --color-primary-green variable for each theme:
  * - Light: var(--color-primary-green) = #047857
- * - Dark: var(--color-primary-green) = #10b981
+ * - Dark: #000000 (black - overrides green for PWA header)
  * - Coffee: var(--color-primary-green) = #5d4037
  */
 const THEME_COLORS = {
   light: '#047857', // Darker emerald green - good contrast on light backgrounds
-  dark: '#10b981', // Bright emerald green - high visibility on dark backgrounds
+  dark: '#000000', // Black - clean dark theme header for PWA
   coffee: '#5d4037', // Espresso brown - warm, coffee-inspired default
 } as const
 
