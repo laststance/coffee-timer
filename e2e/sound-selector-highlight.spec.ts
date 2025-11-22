@@ -3,15 +3,27 @@ import { test, expect } from '@playwright/test'
 /**
  * Sound Selector Highlight Behavior Tests
  *
- * These tests verify that the green highlight:
+ * These tests verify that the primary highlight:
  * 1. Always shows on the currently selected item
  * 2. Does NOT change based on hover state
  * 3. Persists when cursor moves away from the selected item
  * 4. Shows subtle gray highlight on hover (non-selected items)
+ *
+ * NOTE: Tests force "light" theme for consistent color assertions.
+ * The primary-green color varies by theme:
+ * - Light: #047857 → rgb(4, 120, 87)
+ * - Dark: #10b981 → rgb(16, 185, 129)
+ * - Coffee: #5d4037 → rgb(93, 64, 55)
  */
 
 test.describe('Sound Selector Highlight Behavior', () => {
   test.beforeEach(async ({ page }) => {
+    // Set theme to 'light' in localStorage BEFORE navigating
+    // This ensures consistent color values for testing regardless of default theme
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'light')
+    })
+
     await page.goto('/en')
     await page.waitForLoadState('networkidle')
 
