@@ -139,8 +139,9 @@ test.describe('PWA Assets Validation', () => {
       const themeColorMeta = await page.locator('meta[name="theme-color"]')
       const themeColor = await themeColorMeta.getAttribute('content')
 
-      // Validate it matches expected green from design (#10B981)
-      expect(themeColor).toBe('#10B981')
+      // Validate it matches coffee theme default (#5d4037)
+      // Note: Default theme is 'coffee' with espresso brown color
+      expect(themeColor).toBe('#5d4037')
     })
   })
 
