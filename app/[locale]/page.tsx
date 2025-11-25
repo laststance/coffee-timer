@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Settings } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useTimerStore } from '@/lib/stores/timerStore'
@@ -16,6 +17,37 @@ import { SettingsPanel } from '@/components/settings/SettingsPanel'
 import { LanguageToggle } from '@/components/LanguageToggle'
 import { ServiceWorkerRegistration } from '@/components/notifications/ServiceWorkerRegistration'
 import { NotificationTest } from '@/components/notifications/NotificationTest'
+
+// Component to handle PWA shortcut actions from URL parameters
+function ShortcutHandler({
+  onStartTimer,
+  onOpenSettings,
+  isHydrated,
+}: {
+  onStartTimer: () => void
+  onOpenSettings: () => void
+  isHydrated: boolean
+}) {
+  const searchParams = useSearchParams()
+  const action = searchParams.get('action')
+  const actionHandledRef = useRef(false)
+
+  useEffect(() => {
+    if (!isHydrated || actionHandledRef.current) return
+
+    if (action === 'start') {
+      actionHandledRef.current = true
+      onStartTimer()
+      window.history.replaceState({}, '', window.location.pathname)
+    } else if (action === 'settings') {
+      actionHandledRef.current = true
+      onOpenSettings()
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [action, isHydrated, onStartTimer, onOpenSettings])
+
+  return null
+}
 
 export default function Home() {
   const t = useTranslations('App')
@@ -42,6 +74,27 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const previousTimeRef = useRef(timeRemaining)
   const userSetTimeRef = useRef(false)
+
+  // Start timer from PWA shortcut (separate function to handle async)
+  const handleStartFromShortcut = useCallback(async () => {
+    try {
+      await audioManager.initialize()
+      const currentPreset = useSettingsStore.getState().soundPreset
+      if (currentPreset !== 'none') {
+        await audioManager.preload(currentPreset)
+      }
+      useTimerStore.getState().start()
+    } catch (error) {
+      console.error('[Shortcut] Failed to start timer:', error)
+      // Still try to start timer even if audio fails
+      useTimerStore.getState().start()
+    }
+  }, [])
+
+  // Open settings callback for PWA shortcut
+  const handleOpenSettings = useCallback(() => {
+    setIsSettingsOpen(true)
+  }, [])
 
   // Initialize AudioContext and preload sound on timer start (user interaction)
   const handleStart = useCallback(async () => {
@@ -142,6 +195,15 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-12 p-8">
       {/* Service Worker Registration - runs once on mount */}
       <ServiceWorkerRegistration />
+
+      {/* PWA Shortcut Handler - wrapped in Suspense for SSG compatibility */}
+      <Suspense fallback={null}>
+        <ShortcutHandler
+          onStartTimer={handleStartFromShortcut}
+          onOpenSettings={handleOpenSettings}
+          isHydrated={timerState !== null}
+        />
+      </Suspense>
 
       <div className="mx-auto w-full max-w-2xl space-y-12">
         {/* Header with Language and Settings */}
