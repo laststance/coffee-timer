@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Bell, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
@@ -27,8 +27,11 @@ export function NotificationTest() {
   const volume = settingsState?.volume ?? 70
   const [isRequesting, setIsRequesting] = useState(false)
   const [isSending, setIsSending] = useState(false)
+  const [supported, setSupported] = useState(false)
 
-  const supported = isNotificationSupported()
+  useEffect(() => {
+    setSupported(isNotificationSupported())
+  }, [])
 
   const handleRequestPermission = async () => {
     setIsRequesting(true)
