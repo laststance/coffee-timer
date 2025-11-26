@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -15,7 +16,10 @@ interface SettingsPanelProps {
   onClose: () => void
 }
 
-export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
+export const SettingsPanel = memo(function SettingsPanel({
+  isOpen,
+  onClose,
+}: SettingsPanelProps) {
   const t = useTranslations('Settings')
   const settingsState = useStore(useSettingsStore, (state) => state)
   const soundPreset = settingsState?.soundPreset ?? 'ascending-chime'
@@ -72,4 +76,4 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
       </Dialog.Portal>
     </Dialog.Root>
   )
-}
+})

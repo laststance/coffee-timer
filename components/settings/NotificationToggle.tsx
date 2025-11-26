@@ -1,27 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { memo } from 'react'
 import { Bell, BellOff } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
 import useStore from '@/lib/hooks/useStore'
-import {
-  requestNotificationPermission,
-  isNotificationSupported,
-} from '@/lib/notifications/notificationManager'
+import { useNotificationSupport } from '@/lib/hooks/useNotificationSupport'
+import { requestNotificationPermission } from '@/lib/notifications/notificationManager'
 
-export function NotificationToggle() {
+export const NotificationToggle = memo(function NotificationToggle() {
   const t = useTranslations('Notifications')
   const notificationState = useStore(useNotificationStore, (state) => state)
   const enabled = notificationState?.enabled ?? true
   const permission = notificationState?.permission ?? 'default'
   const setEnabled = notificationState?.setEnabled ?? (() => {})
   const setPermission = notificationState?.setPermission ?? (() => {})
-  const [supported, setSupported] = useState(false)
-
-  useEffect(() => {
-    setSupported(isNotificationSupported())
-  }, [])
+  const supported = useNotificationSupport()
 
   const handleToggle = async () => {
     if (!supported) return
@@ -91,4 +85,4 @@ export function NotificationToggle() {
       </div>
     </div>
   )
-}
+})

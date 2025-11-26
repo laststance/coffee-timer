@@ -1,44 +1,17 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useNotificationStore } from '@/lib/stores/notificationStore'
-import {
-  registerServiceWorker,
-  getNotificationPermission,
-} from '@/lib/notifications/notificationManager'
+import { memo } from 'react'
+import { useServiceWorkerSetup } from '@/lib/hooks/useServiceWorkerSetup'
 
 /**
  * ServiceWorkerRegistration Component
  * Registers the Service Worker on app load and syncs notification permission state
  */
-export function ServiceWorkerRegistration() {
-  useEffect(() => {
-    // Register Service Worker
-    registerServiceWorker().then((registration) => {
-      if (registration) {
-        console.log('[App] Service Worker registered successfully')
-      }
-    })
+export const ServiceWorkerRegistration = memo(
+  function ServiceWorkerRegistration() {
+    useServiceWorkerSetup()
 
-    // Sync initial permission state
-    const permission = getNotificationPermission()
-    useNotificationStore.getState().setPermission(permission)
-
-    // Listen for permission changes (some browsers support this)
-    if ('permissions' in navigator) {
-      navigator.permissions
-        .query({ name: 'notifications' as PermissionName })
-        .then((permissionStatus) => {
-          permissionStatus.addEventListener('change', () => {
-            useNotificationStore.getState().setPermission(getNotificationPermission())
-          })
-        })
-        .catch((error) => {
-          console.warn('[Notifications] Permission monitoring not supported:', error)
-        })
-    }
-  }, [])
-
-  // This component doesn't render anything
-  return null
-}
+    // This component doesn't render anything
+    return null
+  },
+)

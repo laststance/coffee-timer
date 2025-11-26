@@ -5,15 +5,12 @@ import * as Select from '@radix-ui/react-select'
 import { Check, ChevronDown, Moon, Sun, Coffee, Monitor } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useTranslations } from 'next-intl'
+import { useMounted } from '@/lib/hooks/useMounted'
 
-export function ThemeSelector() {
+export const ThemeSelector = React.memo(function ThemeSelector() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const mounted = useMounted()
   const t = useTranslations('Settings')
-
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
 
   if (!mounted) {
     return null
@@ -83,4 +80,4 @@ export function ThemeSelector() {
       </Select.Root>
     </div>
   )
-}
+})

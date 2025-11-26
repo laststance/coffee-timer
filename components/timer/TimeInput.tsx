@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { useTranslations } from 'next-intl'
 import { MAX_TIMER_MINUTES } from '@/lib/constants/time'
 
@@ -10,7 +11,7 @@ interface TimeInputProps {
   initialSeconds?: number
 }
 
-export function TimeInput({
+export const TimeInput = memo(function TimeInput({
   onTimeChange,
   disabled,
   initialMinutes = 5,
@@ -78,4 +79,4 @@ export function TimeInput({
       </div>
     </div>
   )
-}
+})

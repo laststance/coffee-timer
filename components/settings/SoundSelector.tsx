@@ -8,6 +8,7 @@ import type { SoundPreset } from '@/lib/stores/settingsStore'
 import { SUPPORTED_SOUND_PRESETS, audioManager } from '@/lib/audio/audioManager'
 import { useSettingsStore } from '@/lib/stores/settingsStore'
 import useStore from '@/lib/hooks/useStore'
+import { useSoundSelectorEffects } from '@/lib/hooks/useSoundSelectorEffects'
 
 interface SoundSelectorProps {
   value: SoundPreset
@@ -20,7 +21,10 @@ const SOUND_OPTIONS = [
 ] as const satisfies ReadonlyArray<SoundPreset>
 const FALLBACK_SOUND = SUPPORTED_SOUND_PRESETS[0]
 
-export function SoundSelector({ value, onChange }: SoundSelectorProps) {
+export const SoundSelector = React.memo(function SoundSelector({
+  value,
+  onChange,
+}: SoundSelectorProps) {
   const t = useTranslations('Settings')
   const tPresets = useTranslations('SoundPresets')
   const volume = useStore(useSettingsStore, (state) => state.volume) ?? 70
@@ -63,18 +67,8 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
     })
   }
 
-  // Cleanup on unmount
-  React.useEffect(() => {
-    return () => {
-      audioManager.stop()
-    }
-  }, [])
-
-  React.useEffect(() => {
-    if (!isValueSupported) {
-      onChange(FALLBACK_SOUND)
-    }
-  }, [isValueSupported, onChange])
+  // Use custom hook for effects
+  useSoundSelectorEffects(isValueSupported, onChange, FALLBACK_SOUND)
 
   const currentLabel = tPresets(safeValue)
 
@@ -159,4 +153,4 @@ export function SoundSelector({ value, onChange }: SoundSelectorProps) {
       </Select.Root>
     </div>
   )
-}
+})

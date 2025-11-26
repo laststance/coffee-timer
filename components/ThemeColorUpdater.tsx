@@ -107,25 +107,9 @@
 
 'use client'
 
-import { useEffect } from 'react'
+import { memo } from 'react'
 import { useTheme } from 'next-themes'
-
-/**
- * Theme color mapping for Coffee Timer themes
- *
- * These colors are extracted from app/globals.css where they're defined
- * as CSS custom properties under each theme's data-theme attribute.
- *
- * Colors match the --color-primary-green variable for each theme:
- * - Light: var(--color-primary-green) = #047857
- * - Dark: #000000 (black - overrides green for PWA header)
- * - Coffee: var(--color-primary-green) = #5d4037
- */
-const THEME_COLORS = {
-  light: '#047857', // Darker emerald green - good contrast on light backgrounds
-  dark: '#000000', // Black - clean dark theme header for PWA
-  coffee: '#5d4037', // Espresso brown - warm, coffee-inspired default
-} as const
+import { useThemeColorUpdater } from '@/lib/hooks/useThemeColorUpdater'
 
 /**
  * ThemeColorUpdater Component
@@ -135,31 +119,11 @@ const THEME_COLORS = {
  *
  * @returns {null} - This component has no visual output
  */
-export function ThemeColorUpdater() {
+export const ThemeColorUpdater = memo(function ThemeColorUpdater() {
   const { theme } = useTheme()
 
-  useEffect(() => {
-    // Early return if theme is not yet loaded (SSR/hydration phase)
-    if (!theme) return
-
-    // Locate the theme-color meta tag in the document head
-    // This tag should already exist from Next.js viewport configuration
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]')
-
-    // If meta tag exists and theme is one of our supported themes, update it
-    if (metaThemeColor && theme in THEME_COLORS) {
-      const newColor = THEME_COLORS[theme as keyof typeof THEME_COLORS]
-
-      // Update the content attribute with the new theme color
-      metaThemeColor.setAttribute('content', newColor)
-
-      // Note: This change affects browser chrome immediately in web view,
-      // but has limited effect on already-installed PWA window chrome.
-      // For installed PWAs, the manifest theme_color (set at install time)
-      // takes precedence for window title bar color.
-    }
-  }, [theme]) // Re-run effect when theme changes
+  useThemeColorUpdater(theme)
 
   // This component performs side effects only, no rendering needed
   return null
-}
+})

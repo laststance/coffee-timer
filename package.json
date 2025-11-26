@@ -33,6 +33,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@eslint/eslintrc": "^3.3.1",
+    "@laststance/react-next-eslint-plugin": "^1.1.0",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^24.10.1",

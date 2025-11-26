@@ -1,4 +1,6 @@
-export default function NotFound() {
+import { memo } from 'react'
+
+const NotFound = memo(function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-bg-primary p-4">
       <div className="text-center">
@@ -12,4 +14,6 @@ export default function NotFound() {
       </div>
     </div>
   )
-}
+})
+
+export default NotFound

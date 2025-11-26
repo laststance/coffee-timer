@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, memo } from 'react'
 import { Bell, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
 import { useSettingsStore } from '@/lib/stores/settingsStore'
 import useStore from '@/lib/hooks/useStore'
+import { useNotificationSupport } from '@/lib/hooks/useNotificationSupport'
 import {
   requestNotificationPermission,
   showNotification,
-  isNotificationSupported,
 } from '@/lib/notifications/notificationManager'
 import { audioManager } from '@/lib/audio/audioManager'
 
@@ -17,7 +17,7 @@ import { audioManager } from '@/lib/audio/audioManager'
  * NotificationTest Component
  * Provides UI for testing notifications and managing permissions
  */
-export function NotificationTest() {
+export const NotificationTest = memo(function NotificationTest() {
   const t = useTranslations('Notifications')
   const notificationState = useStore(useNotificationStore, (state) => state)
   const permission = notificationState?.permission ?? 'default'
@@ -27,11 +27,7 @@ export function NotificationTest() {
   const volume = settingsState?.volume ?? 70
   const [isRequesting, setIsRequesting] = useState(false)
   const [isSending, setIsSending] = useState(false)
-  const [supported, setSupported] = useState(false)
-
-  useEffect(() => {
-    setSupported(isNotificationSupported())
-  }, [])
+  const supported = useNotificationSupport()
 
   const handleRequestPermission = async () => {
     setIsRequesting(true)
@@ -171,4 +167,4 @@ export function NotificationTest() {
       )}
     </div>
   )
-}
+})

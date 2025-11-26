@@ -1,12 +1,13 @@
 'use client'
 
+import { memo } from 'react'
 import * as Select from '@radix-ui/react-select'
 import { Check, ChevronDown, Languages } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter, usePathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 
-export function LanguageToggle() {
+export const LanguageToggle = memo(function LanguageToggle() {
   const t = useTranslations('Language')
   const locale = useLocale()
   const router = useRouter()
@@ -55,4 +56,4 @@ export function LanguageToggle() {
       </Select.Root>
     </div>
   )
-}
+})

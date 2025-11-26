@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { Play, Pause, RotateCcw } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
@@ -11,7 +12,7 @@ interface TimerControlsProps {
   isRunning: boolean
 }
 
-export function TimerControls({
+export const TimerControls = memo(function TimerControls({
   onStart,
   onPause,
   onReset,
@@ -59,4 +60,4 @@ export function TimerControls({
       </motion.button>
     </div>
   )
-}
+})
