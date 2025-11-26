@@ -48,6 +48,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.3.1
         version: 3.3.1
+      '@laststance/react-next-eslint-plugin':
+        specifier: ^1.1.0
+        version: 1.1.0(eslint@9.39.1(jiti@2.6.1))
       '@playwright/test':
         specifier: ^1.57.0
         version: 1.57.0
@@ -417,6 +420,12 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@laststance/react-next-eslint-plugin@1.1.0':
+    resolution: {integrity: sha512-BHGAYH5YAQ/t4AZsaZwdz1CR0Tbwu5d56ruBASRKmoI1ohh7sPzebC5/4++/EqzphCjSRteuTiOZ0WcI8Np+Tw==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      eslint: '>=9.0.0'
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -2992,6 +3001,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@laststance/react-next-eslint-plugin@1.1.0(eslint@9.39.1(jiti@2.6.1))':
+    dependencies:
+      eslint: 9.39.1(jiti@2.6.1)
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
