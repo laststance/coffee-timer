@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, useCallback, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, memo, useCallback, Suspense } from 'react'
 import { Settings } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useTimerStore } from '@/lib/stores/timerStore'
@@ -9,7 +8,12 @@ import { useSettingsStore } from '@/lib/stores/settingsStore'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
 import useStore from '@/lib/hooks/useStore'
 import { audioManager } from '@/lib/audio/audioManager'
-import { showNotification } from '@/lib/notifications/notificationManager'
+import { useShortcutHandler } from '@/lib/hooks/useShortcutHandler'
+import { useTimerSetTimeTracker } from '@/lib/hooks/useTimerSetTimeTracker'
+import { useSoundPreloader } from '@/lib/hooks/useSoundPreloader'
+import { useTimerTick } from '@/lib/hooks/useTimerTick'
+import { usePageVisibility } from '@/lib/hooks/usePageVisibility'
+import { useTimerCompletion } from '@/lib/hooks/useTimerCompletion'
 import { TimerDisplay } from '@/components/timer/TimerDisplay'
 import { TimerControls } from '@/components/timer/TimerControls'
 import { TimeInput } from '@/components/timer/TimeInput'
@@ -18,8 +22,11 @@ import { LanguageToggle } from '@/components/LanguageToggle'
 import { ServiceWorkerRegistration } from '@/components/notifications/ServiceWorkerRegistration'
 import { NotificationTest } from '@/components/notifications/NotificationTest'
 
-// Component to handle PWA shortcut actions from URL parameters
-function ShortcutHandler({
+/**
+ * Component to handle PWA shortcut actions from URL parameters.
+ * Wrapped in Suspense for SSG compatibility.
+ */
+const ShortcutHandler = memo(function ShortcutHandler({
   onStartTimer,
   onOpenSettings,
   isHydrated,
@@ -28,28 +35,11 @@ function ShortcutHandler({
   onOpenSettings: () => void
   isHydrated: boolean
 }) {
-  const searchParams = useSearchParams()
-  const action = searchParams.get('action')
-  const actionHandledRef = useRef(false)
-
-  useEffect(() => {
-    if (!isHydrated || actionHandledRef.current) return
-
-    if (action === 'start') {
-      actionHandledRef.current = true
-      onStartTimer()
-      window.history.replaceState({}, '', window.location.pathname)
-    } else if (action === 'settings') {
-      actionHandledRef.current = true
-      onOpenSettings()
-      window.history.replaceState({}, '', window.location.pathname)
-    }
-  }, [action, isHydrated, onStartTimer, onOpenSettings])
-
+  useShortcutHandler(onStartTimer, onOpenSettings, isHydrated)
   return null
-}
+})
 
-export default function Home() {
+const Home = memo(function Home() {
   const t = useTranslations('App')
   const tNotifications = useTranslations('Notifications')
   // Use hydration-safe hook to prevent SSR mismatches
@@ -72,8 +62,22 @@ export default function Home() {
   const notificationsEnabled = notificationState?.enabled ?? true
   const permission = notificationState?.permission ?? 'default'
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const previousTimeRef = useRef(timeRemaining)
-  const userSetTimeRef = useRef(false)
+
+  // Custom hooks for timer logic
+  const userSetTimeRef = useTimerSetTimeTracker(initialTime, isRunning)
+  useSoundPreloader(soundPreset)
+  useTimerTick(isRunning)
+  usePageVisibility()
+  useTimerCompletion(
+    timeRemaining,
+    soundPreset,
+    volume,
+    notificationsEnabled,
+    permission,
+    userSetTimeRef,
+    tNotifications('timerCompleteTitle'),
+    tNotifications('timerCompleteBody'),
+  )
 
   // Start timer from PWA shortcut (separate function to handle async)
   const handleStartFromShortcut = useCallback(async () => {
@@ -91,9 +95,14 @@ export default function Home() {
     }
   }, [])
 
-  // Open settings callback for PWA shortcut
-  const handleOpenSettings = useCallback(() => {
+  // Open settings callback for PWA shortcut (memoized for ShortcutHandler)
+  const handleOpenSettingsForShortcut = useCallback(() => {
     setIsSettingsOpen(true)
+  }, [])
+
+  // Close settings callback
+  const handleCloseSettings = useCallback(() => {
+    setIsSettingsOpen(false)
   }, [])
 
   // Initialize AudioContext and preload sound on timer start (user interaction)
@@ -111,86 +120,6 @@ export default function Home() {
     useTimerStore.getState().start()
   }, [])
 
-  // Track when user manually sets time
-  useEffect(() => {
-    // When initialTime changes, it means user called setTime()
-    userSetTimeRef.current = true
-  }, [initialTime])
-
-  // Clear the flag when timer starts
-  useEffect(() => {
-    if (isRunning) {
-      userSetTimeRef.current = false
-    }
-  }, [isRunning])
-
-  // Preload sound when preset changes (if AudioContext initialized)
-  useEffect(() => {
-    if (soundPreset !== 'none') {
-      audioManager.preload(soundPreset).catch((error) => {
-        console.error('[Timer] Failed to preload sound:', error)
-      })
-    }
-  }, [soundPreset])
-
-  // Set up interval for ticking when timer is running
-  useEffect(() => {
-    if (!isRunning) return
-
-    const interval = setInterval(() => {
-      // Call tick from the store directly to avoid dependency issues
-      useTimerStore.getState().tick()
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isRunning])
-
-  // Handle Page Visibility API for background timer
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        // Tab became visible - recalculate time remaining
-        useTimerStore.getState().updateTimeRemaining()
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [])
-
-  // Play sound and show notification when timer completes
-  useEffect(() => {
-    // Detect when timer just hit 0 (but not if user manually set it to 0)
-    if (
-      previousTimeRef.current > 0 &&
-      timeRemaining === 0 &&
-      !userSetTimeRef.current
-    ) {
-      // Play sound
-      audioManager.play(soundPreset, volume)
-
-      // Show notification if enabled and permission granted
-      if (notificationsEnabled && permission === 'granted') {
-        showNotification({
-          title: tNotifications('timerCompleteTitle'),
-          body: tNotifications('timerCompleteBody'),
-        }).catch((error) => {
-          console.error('[Timer] Failed to show notification:', error)
-        })
-      }
-    }
-    previousTimeRef.current = timeRemaining
-  }, [
-    timeRemaining,
-    soundPreset,
-    volume,
-    notificationsEnabled,
-    permission,
-    tNotifications,
-  ])
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-12 p-8">
       {/* Service Worker Registration - runs once on mount */}
@@ -200,7 +129,7 @@ export default function Home() {
       <Suspense fallback={null}>
         <ShortcutHandler
           onStartTimer={handleStartFromShortcut}
-          onOpenSettings={handleOpenSettings}
+          onOpenSettings={handleOpenSettingsForShortcut}
           isHydrated={timerState !== null}
         />
       </Suspense>
@@ -257,10 +186,9 @@ export default function Home() {
       </div>
 
       {/* Settings Panel */}
-      <SettingsPanel
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-      />
+      <SettingsPanel isOpen={isSettingsOpen} onClose={handleCloseSettings} />
     </main>
   )
-}
+})
+
+export default Home

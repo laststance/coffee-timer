@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import * as Slider from '@radix-ui/react-slider'
 import { Volume2, VolumeX } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -9,7 +10,10 @@ interface VolumeControlProps {
   onChange: (volume: number) => void
 }
 
-export function VolumeControl({ value, onChange }: VolumeControlProps) {
+export const VolumeControl = memo(function VolumeControl({
+  value,
+  onChange,
+}: VolumeControlProps) {
   const t = useTranslations('Settings')
 
   const handleValueChange = (values: number[]) => {
@@ -56,4 +60,4 @@ export function VolumeControl({ value, onChange }: VolumeControlProps) {
       </div>
     </div>
   )
-}
+})

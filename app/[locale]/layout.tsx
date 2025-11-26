@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
-import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
-import { ServiceWorkerRegistration } from '@/components/notifications/ServiceWorkerRegistration'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { ThemeColorUpdater } from '@/components/ThemeColorUpdater'
+import { LayoutBody } from '@/components/LayoutBody'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -109,6 +106,17 @@ const isSupportedLocale = (
 ): value is (typeof routing.locales)[number] =>
   routing.locales.some((supportedLocale) => supportedLocale === value)
 
+/**
+ * LocaleLayout - Server Component for locale-specific layout.
+ * Renders html and body tags with LayoutBody client component for providers.
+ *
+ * Note: This is an async Server Component in Next.js 15.
+ * React.memo() cannot be applied because:
+ * 1. Server Components don't re-render on the client (no memoization benefit)
+ * 2. React.memo() expects synchronous function components
+ * 3. The async pattern is required for Next.js 15's params Promise API
+ */
+// eslint-disable-next-line @laststance/react-next/all-memo -- Async Server Component cannot use React.memo
 export default async function LocaleLayout({
   children,
   params,
@@ -135,23 +143,9 @@ export default async function LocaleLayout({
   return (
     <html lang={resolvedLocale} suppressHydrationWarning>
       <body className="bg-bg-primary text-text-primary antialiased">
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="coffee"
-          enableSystem
-          themes={['light', 'dark', 'coffee']}
-        >
-          {/*
-            ThemeColorUpdater: Dynamically updates browser theme-color meta tag
-            when users switch between themes. See component documentation for
-            technical details and browser support information.
-          */}
-          <ThemeColorUpdater />
-          <ServiceWorkerRegistration />
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <LayoutBody messages={messages} locale={resolvedLocale}>
+          {children}
+        </LayoutBody>
       </body>
     </html>
   )

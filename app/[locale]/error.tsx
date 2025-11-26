@@ -1,17 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
+import { memo } from 'react'
+import { useErrorLogger } from '@/lib/hooks/useErrorLogger'
 
-export default function Error({
+const Error = memo(function Error({
   error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
+  useErrorLogger(error)
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-bg-primary p-4">
@@ -31,4 +30,6 @@ export default function Error({
       </div>
     </div>
   )
-}
+})
+
+export default Error

@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
@@ -10,7 +11,7 @@ interface TimerDisplayProps {
   initialTime: number
 }
 
-export function TimerDisplay({
+export const TimerDisplay = memo(function TimerDisplay({
   timeRemaining,
   isRunning,
   isPaused,
@@ -122,4 +123,4 @@ export function TimerDisplay({
       </motion.div>
     </div>
   )
-}
+})
