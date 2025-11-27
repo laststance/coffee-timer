@@ -23,11 +23,13 @@
   --progress-width: 0%;
 
   /* Glass Variables - INACTIVE by default for original themes */
+  /* Note: --glass-border matches --color-circle-bg for timer visibility */
   --glass-blur: 0px;
+  --glass-backdrop: none;
   --glass-bg: transparent;
   --glass-bg-medium: transparent;
   --glass-bg-solid: transparent;
-  --glass-border: transparent;
+  --glass-border: #e5e7eb;
   --glass-border-highlight: transparent;
   --glass-shadow: none;
   --glass-shadow-elevated: none;
@@ -58,11 +60,13 @@
   --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.5);
 
   /* Glass Variables - INACTIVE for dark theme */
+  /* Note: --glass-border matches --color-circle-bg for timer visibility */
   --glass-blur: 0px;
+  --glass-backdrop: none;
   --glass-bg: transparent;
   --glass-bg-medium: transparent;
   --glass-bg-solid: transparent;
-  --glass-border: transparent;
+  --glass-border: #404040;
   --glass-border-highlight: transparent;
   --glass-shadow: none;
   --glass-shadow-elevated: none;
@@ -93,11 +97,13 @@
   --shadow-soft: 0 4px 6px -1px rgba(62, 39, 35, 0.1);
 
   /* Glass Variables - INACTIVE for coffee theme */
+  /* Note: --glass-border matches --color-circle-bg for timer visibility */
   --glass-blur: 0px;
+  --glass-backdrop: none;
   --glass-bg: transparent;
   --glass-bg-medium: transparent;
   --glass-bg-solid: transparent;
-  --glass-border: transparent;
+  --glass-border: #d7ccc8;
   --glass-border-highlight: transparent;
   --glass-shadow: none;
   --glass-shadow-elevated: none;
@@ -137,6 +143,7 @@
   --glass-blur-light: 10px;
   --glass-blur: 20px;
   --glass-blur-heavy: 40px;
+  --glass-backdrop: blur(20px) saturate(180%);
   --glass-bg: rgba(255, 255, 255, 0.15);
   --glass-bg-medium: rgba(255, 255, 255, 0.25);
   --glass-bg-solid: rgba(255, 255, 255, 0.85);
@@ -159,6 +166,8 @@
   --glass-tint-amber: rgba(251, 191, 36, 0.15);
   --glass-tint-red: rgba(239, 68, 68, 0.15);
   --glass-tint-blue: rgba(96, 165, 250, 0.15);
+  --glass-clear-bg: rgba(255, 255, 255, 0.08);
+  --glass-backdrop-light: blur(10px) saturate(150%);
   --ambient-gradient:
     radial-gradient(
       circle at 20% 80%,
@@ -198,6 +207,7 @@
   --glass-blur-light: 10px;
   --glass-blur: 20px;
   --glass-blur-heavy: 40px;
+  --glass-backdrop: blur(20px) saturate(180%);
   --glass-bg: rgba(30, 30, 30, 0.25);
   --glass-bg-medium: rgba(40, 40, 40, 0.35);
   --glass-bg-solid: rgba(30, 30, 30, 0.9);
@@ -220,6 +230,8 @@
   --glass-tint-amber: rgba(251, 191, 36, 0.2);
   --glass-tint-red: rgba(239, 68, 68, 0.2);
   --glass-tint-blue: rgba(96, 165, 250, 0.2);
+  --glass-clear-bg: rgba(0, 0, 0, 0.15);
+  --glass-backdrop-light: blur(10px) saturate(150%);
   --ambient-gradient:
     radial-gradient(
       circle at 20% 80%,
@@ -259,6 +271,7 @@
   --glass-blur-light: 10px;
   --glass-blur: 20px;
   --glass-blur-heavy: 40px;
+  --glass-backdrop: blur(20px) saturate(180%);
   --glass-bg: rgba(239, 235, 233, 0.2);
   --glass-bg-medium: rgba(239, 235, 233, 0.35);
   --glass-bg-solid: rgba(239, 235, 233, 0.9);
@@ -281,6 +294,8 @@
   --glass-tint-amber: rgba(212, 163, 115, 0.2);
   --glass-tint-red: rgba(141, 110, 99, 0.15);
   --glass-tint-blue: rgba(141, 110, 99, 0.12);
+  --glass-clear-bg: rgba(239, 235, 233, 0.1);
+  --glass-backdrop-light: blur(10px) saturate(150%);
   --ambient-gradient:
     radial-gradient(
       circle at 20% 80%,
@@ -306,8 +321,8 @@
 /* Base Glass Effect */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
 }
@@ -365,6 +380,95 @@
   background: var(--glass-tint-blue);
 }
 
+/* ============================================
+   SOLID BUTTON STYLING FOR ORIGINAL THEMES
+   Original themes (light, dark, coffee) need solid filled
+   buttons to match their pre-Liquid Glass appearance.
+   ============================================ */
+
+:root button.glass-tint-green,
+[data-theme='light'] button.glass-tint-green {
+  background: var(--color-primary-green) !important;
+  color: white !important;
+}
+
+:root button.glass-tint-amber,
+[data-theme='light'] button.glass-tint-amber {
+  background: var(--color-accent-amber) !important;
+  color: white !important;
+}
+
+:root button.glass-tint-red,
+[data-theme='light'] button.glass-tint-red {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+[data-theme='dark'] button.glass-tint-green {
+  background: var(--color-primary-green) !important;
+  color: white !important;
+}
+
+[data-theme='dark'] button.glass-tint-amber {
+  background: var(--color-accent-amber) !important;
+  color: white !important;
+}
+
+[data-theme='dark'] button.glass-tint-red {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+[data-theme='coffee'] button.glass-tint-green {
+  background: var(--color-primary-green) !important;
+  color: white !important;
+}
+
+[data-theme='coffee'] button.glass-tint-amber {
+  background: var(--color-accent-amber) !important;
+  color: white !important;
+}
+
+[data-theme='coffee'] button.glass-tint-red {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+/* Reset/neutral buttons for original themes */
+:root
+  button.glass:not(.glass-tint-green):not(.glass-tint-amber):not(
+    .glass-tint-red
+  ):not(.glass-tint-blue),
+[data-theme='light']
+  button.glass:not(.glass-tint-green):not(.glass-tint-amber):not(
+    .glass-tint-red
+  ):not(.glass-tint-blue) {
+  background: var(--color-gray-500) !important;
+  color: white !important;
+}
+
+[data-theme='dark']
+  button.glass:not(.glass-tint-green):not(.glass-tint-amber):not(
+    .glass-tint-red
+  ):not(.glass-tint-blue) {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme='coffee']
+  button.glass:not(.glass-tint-green):not(.glass-tint-amber):not(
+    .glass-tint-red
+  ):not(.glass-tint-blue) {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Note: CSS overrides for original themes removed.
+   Components now conditionally render based on theme:
+   - Original themes (light/dark/coffee): render without GlassPanel wrappers
+   - Liquid Glass themes: render with full glass effects
+   This approach is cleaner and ensures pixel-perfect match with baselines. */
+
 /* Capsule Shape (iOS 26 style) */
 .glass-capsule {
   border-radius: 9999px;
@@ -400,18 +504,12 @@
 
 /* Clear Glass (more transparent, for media backgrounds) */
 .glass-clear {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(var(--glass-blur-light, 10px)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-light, 10px)) saturate(150%);
+  background: var(--glass-clear-bg, transparent);
+  backdrop-filter: var(--glass-backdrop-light, none);
+  -webkit-backdrop-filter: var(--glass-backdrop-light, none);
 }
 
-[data-theme='liquid-glass-dark'] .glass-clear {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-[data-theme='liquid-glass-coffee'] .glass-clear {
-  background: rgba(239, 235, 233, 0.1);
-}
+/* glass-clear theme-specific backgrounds handled via CSS variables in theme definitions */
 
 /* ============================================
    ACCESSIBILITY: Reduced Transparency

@@ -3,6 +3,7 @@
 import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { useTheme } from 'next-themes'
 import { GlassPanel } from '@/components/ui/GlassPanel'
 
 interface TimerDisplayProps {
@@ -13,13 +14,17 @@ interface TimerDisplayProps {
 }
 
 /**
- * TimerDisplay - Circular progress timer with Liquid Glass styling
+ * TimerDisplay - Circular progress timer with theme-aware styling
  *
- * Features Apple's Liquid Glass design principles:
+ * For Liquid Glass themes:
  * - Translucent glass container with backdrop blur
  * - Color-coded tints for timer states (green/amber/gray)
  * - Specular highlights for depth
  * - Fluid motion animations
+ *
+ * For original themes (light/dark/coffee):
+ * - Simple layout without glass wrapper
+ * - Maintains original visual appearance
  *
  * States:
  * - Running: Green tint with pulse animation
@@ -33,6 +38,10 @@ export const TimerDisplay = memo(function TimerDisplay({
   initialTime,
 }: TimerDisplayProps) {
   const t = useTranslations('Timer')
+  const { resolvedTheme } = useTheme()
+
+  // Check if current theme is a liquid-glass variant
+  const isLiquidGlass = resolvedTheme?.startsWith('liquid-glass') ?? false
 
   // Format time as MM:SS
   const minutes = Math.floor(timeRemaining / 60)
@@ -52,13 +61,13 @@ export const TimerDisplay = memo(function TimerDisplay({
 
   // Determine color based on state
   const getColor = () => {
-    if (timeRemaining === 0) return 'var(--color-text-tertiary)' // gray when complete
-    if (isPaused) return 'var(--color-accent-amber)' // amber when paused
-    if (isRunning) return 'var(--color-primary-green)' // green when running
-    return 'var(--color-text-tertiary)' // gray when idle
+    if (timeRemaining === 0) return '#9CA3AF' // gray when complete
+    if (isPaused) return '#FBBF24' // amber when paused
+    if (isRunning) return '#10B981' // green when running
+    return '#9CA3AF' // gray when idle
   }
 
-  // Get glass tint based on timer state
+  // Get glass tint based on timer state (only used for liquid-glass themes)
   const getGlassTint = (): 'green' | 'amber' | 'none' => {
     if (timeRemaining === 0) return 'none'
     if (isPaused) return 'amber'
@@ -76,6 +85,87 @@ export const TimerDisplay = memo(function TimerDisplay({
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
+  // Timer content (shared between both modes)
+  const timerContent = (
+    <motion.div
+      className="relative"
+      data-testid="timer-display"
+      role="timer"
+      aria-label={`${t('timeRemaining')}: ${formattedTime}`}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {/* SVG Circular Progress */}
+      <svg
+        width={size}
+        height={size}
+        className="transform -rotate-90"
+        data-testid="timer-progress-svg"
+        aria-hidden="true"
+        role="img"
+        aria-label={`${t('progress')}: ${Math.round(progress)}%`}
+      >
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="var(--color-circle-bg)"
+          strokeWidth={strokeWidth}
+        />
+        {/* Progress circle */}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          data-testid="timer-progress-ring"
+          role="progressbar"
+          aria-valuenow={Math.round(progress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        />
+      </svg>
+
+      {/* Timer text in center */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.span
+          className="font-mono text-6xl font-bold drop-shadow-sm"
+          data-testid="timer-text"
+          style={{ color }}
+          animate={
+            timeRemaining === 0
+              ? { scale: [1, 1.1, 1], opacity: [1, 0.8, 1] }
+              : { scale: 1 }
+          }
+          transition={{ duration: 0.3 }}
+        >
+          {formattedTime}
+        </motion.span>
+      </div>
+
+      {/* Screen reader only status */}
+      <span className="sr-only">{getTimerStatus()}</span>
+    </motion.div>
+  )
+
+  // For original themes: simple layout without GlassPanel
+  if (!isLiquidGlass) {
+    return (
+      <div className="flex items-center justify-center">{timerContent}</div>
+    )
+  }
+
+  // For Liquid Glass themes: full glass effect
   return (
     <div className="flex items-center justify-center p-4">
       <GlassPanel
@@ -105,81 +195,7 @@ export const TimerDisplay = memo(function TimerDisplay({
             : undefined
         }
       >
-        <motion.div
-          className="relative"
-          data-testid="timer-display"
-          role="timer"
-          aria-label={`${t('timeRemaining')}: ${formattedTime}`}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {/* SVG Circular Progress */}
-          <svg
-            width={size}
-            height={size}
-            className="transform -rotate-90"
-            data-testid="timer-progress-svg"
-            aria-hidden="true"
-            role="img"
-            aria-label={`${t('progress')}: ${Math.round(progress)}%`}
-          >
-            {/* Glass-style background circle */}
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke="var(--glass-border)"
-              strokeWidth={strokeWidth}
-              opacity={0.5}
-            />
-            {/* Progress circle with glow effect */}
-            <motion.circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke={color}
-              strokeWidth={strokeWidth}
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              initial={{ strokeDashoffset: circumference }}
-              animate={{ strokeDashoffset }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
-              data-testid="timer-progress-ring"
-              role="progressbar"
-              aria-valuenow={Math.round(progress)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              style={{
-                filter: isRunning
-                  ? 'drop-shadow(0 0 8px currentColor)'
-                  : 'none',
-              }}
-            />
-          </svg>
-
-          {/* Timer text in center */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.span
-              className="font-mono text-6xl font-bold drop-shadow-sm"
-              data-testid="timer-text"
-              style={{ color }}
-              animate={
-                timeRemaining === 0
-                  ? { scale: [1, 1.1, 1], opacity: [1, 0.8, 1] }
-                  : { scale: 1 }
-              }
-              transition={{ duration: 0.3 }}
-            >
-              {formattedTime}
-            </motion.span>
-          </div>
-
-          {/* Screen reader only status */}
-          <span className="sr-only">{getTimerStatus()}</span>
-        </motion.div>
+        {timerContent}
       </GlassPanel>
     </div>
   )

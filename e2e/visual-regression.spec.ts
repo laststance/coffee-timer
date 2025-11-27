@@ -38,8 +38,48 @@ async function setTheme(page: Page, theme: Theme): Promise<void> {
   }, theme)
 }
 
+/**
+ * Mocks notification to 'denied' permission for consistent VRT screenshots.
+ * This ensures the NotificationTest component renders in the same state
+ * as when baselines were captured (showing "Notifications blocked" message).
+ * @param page - Playwright page object
+ */
+async function mockNotificationPermission(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    // Mock Notification.permission to 'denied' to match baseline state
+    Object.defineProperty(window, 'Notification', {
+      value: {
+        permission: 'denied',
+        requestPermission: () => Promise.resolve('denied'),
+      },
+      writable: true,
+      configurable: true,
+    })
+
+    // Set notification store state in localStorage to match denied state
+    const notificationState = {
+      state: {
+        permission: 'denied',
+        isEnabled: false,
+        isServiceWorkerReady: false,
+      },
+      version: 0,
+    }
+    localStorage.setItem(
+      'notification-storage',
+      JSON.stringify(notificationState),
+    )
+  })
+}
+
 test.describe('Visual Regression Tests', () => {
   test.beforeEach(async ({ page }, testInfo) => {
+    // Skip LiquidGlass projects (handled by liquid-glass-visual-regression.spec.ts)
+    if (testInfo.project.name.includes('LiquidGlass')) {
+      test.skip()
+      return
+    }
+
     // Skip non-VRT projects (legacy projects without theme suffix)
     const isVrtProject =
       testInfo.project.name.includes('Light') ||
@@ -53,6 +93,7 @@ test.describe('Visual Regression Tests', () => {
 
     const theme = getThemeFromProject(testInfo.project.name)
     await setTheme(page, theme)
+    await mockNotificationPermission(page)
   })
 
   test('home page - initial state', async ({ page }) => {
