@@ -1,5 +1,312 @@
 @import 'tailwindcss';
 
+/* ============================================
+   LIQUID GLASS DESIGN SYSTEM
+   Based on Apple WWDC 2025 Liquid Glass principles
+   ============================================ */
+
+/* Liquid Glass Core Variables */
+:root {
+  /* Glass Blur Levels */
+  --glass-blur-light: 10px;
+  --glass-blur: 20px;
+  --glass-blur-heavy: 40px;
+
+  /* Glass Background (Light Mode) */
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-bg-medium: rgba(255, 255, 255, 0.25);
+  --glass-bg-solid: rgba(255, 255, 255, 0.85);
+
+  /* Glass Borders */
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-border-highlight: rgba(255, 255, 255, 0.4);
+
+  /* Glass Shadows */
+  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  --glass-shadow-elevated: 0 12px 40px rgba(31, 38, 135, 0.2);
+  --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.15);
+
+  /* Specular Highlights */
+  --glass-highlight: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 50%
+  );
+  --glass-highlight-soft: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 100%
+  );
+
+  /* Tint Colors (for state indication) */
+  --glass-tint-green: rgba(16, 185, 129, 0.15);
+  --glass-tint-amber: rgba(251, 191, 36, 0.15);
+  --glass-tint-red: rgba(239, 68, 68, 0.15);
+  --glass-tint-blue: rgba(96, 165, 250, 0.15);
+
+  /* Ambient Background Gradients */
+  --ambient-gradient:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(16, 185, 129, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(251, 191, 36, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(96, 165, 250, 0.05) 0%,
+      transparent 70%
+    );
+}
+
+/* Dark Mode Glass Variables */
+[data-theme='dark'] {
+  --glass-bg: rgba(30, 30, 30, 0.25);
+  --glass-bg-medium: rgba(40, 40, 40, 0.35);
+  --glass-bg-solid: rgba(30, 30, 30, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-highlight: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.05);
+  --glass-highlight: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%
+  );
+  --glass-highlight-soft: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 100%
+  );
+  --glass-tint-green: rgba(16, 185, 129, 0.2);
+  --glass-tint-amber: rgba(251, 191, 36, 0.2);
+  --glass-tint-red: rgba(239, 68, 68, 0.2);
+  --glass-tint-blue: rgba(96, 165, 250, 0.2);
+  --ambient-gradient:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(16, 185, 129, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(251, 191, 36, 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(96, 165, 250, 0.04) 0%,
+      transparent 70%
+    );
+}
+
+/* Coffee Theme Glass Variables */
+[data-theme='coffee'] {
+  --glass-bg: rgba(239, 235, 233, 0.2);
+  --glass-bg-medium: rgba(239, 235, 233, 0.35);
+  --glass-bg-solid: rgba(239, 235, 233, 0.9);
+  --glass-border: rgba(141, 110, 99, 0.2);
+  --glass-border-highlight: rgba(141, 110, 99, 0.35);
+  --glass-shadow: 0 8px 32px rgba(62, 39, 35, 0.15);
+  --glass-shadow-elevated: 0 12px 40px rgba(62, 39, 35, 0.2);
+  --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.12);
+  --glass-highlight: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 50%
+  );
+  --glass-highlight-soft: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 100%
+  );
+  --glass-tint-green: rgba(93, 64, 55, 0.15);
+  --glass-tint-amber: rgba(212, 163, 115, 0.2);
+  --glass-tint-red: rgba(141, 110, 99, 0.15);
+  --glass-tint-blue: rgba(141, 110, 99, 0.12);
+  --ambient-gradient:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(93, 64, 55, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(212, 163, 115, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(141, 110, 99, 0.05) 0%,
+      transparent 70%
+    );
+}
+
+/* ============================================
+   LIQUID GLASS UTILITY CLASSES
+   ============================================ */
+
+/* Base Glass Effect */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+}
+
+/* Glass with specular highlight overlay */
+.glass-highlight {
+  position: relative;
+}
+
+.glass-highlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--glass-highlight);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Elevated Glass (deeper shadow) */
+.glass-elevated {
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
+}
+
+/* Interactive Glass (lifts on hover/focus) */
+.glass-interactive {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.glass-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
+}
+
+.glass-interactive:active {
+  transform: translateY(0);
+}
+
+/* Glass Tint Variants */
+.glass-tint-green {
+  background: var(--glass-tint-green);
+}
+
+.glass-tint-amber {
+  background: var(--glass-tint-amber);
+}
+
+.glass-tint-red {
+  background: var(--glass-tint-red);
+}
+
+.glass-tint-blue {
+  background: var(--glass-tint-blue);
+}
+
+/* Capsule Shape (iOS 26 style) */
+.glass-capsule {
+  border-radius: 9999px;
+}
+
+/* Ambient Background */
+.ambient-bg {
+  background-image: var(--ambient-gradient);
+}
+
+/* Glass Border Color Utility */
+.bg-glass-border {
+  background-color: var(--glass-border);
+}
+
+/* Focus Tint Variants (for inputs) */
+.focus\:glass-tint-green:focus {
+  background: var(--glass-tint-green);
+}
+
+.focus\:glass-tint-amber:focus {
+  background: var(--glass-tint-amber);
+}
+
+/* Clear Glass (more transparent, for media backgrounds) */
+.glass-clear {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(var(--glass-blur-light)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-light)) saturate(150%);
+}
+
+[data-theme='dark'] .glass-clear {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='coffee'] .glass-clear {
+  background: rgba(239, 235, 233, 0.1);
+}
+
+/* ============================================
+   ACCESSIBILITY: Reduced Transparency
+   ============================================ */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--glass-bg-solid);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .glass-highlight::before {
+    opacity: 0.3;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY: Increased Contrast
+   ============================================ */
+@media (prefers-contrast: more) {
+  .glass {
+    background: var(--glass-bg-solid);
+    border: 2px solid currentColor;
+  }
+
+  .glass-highlight::before {
+    display: none;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY: Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .glass-interactive {
+    transition: none;
+  }
+
+  .glass-interactive:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   BROWSER FALLBACK: No backdrop-filter support
+   ============================================ */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass {
+    background: var(--glass-bg-solid);
+  }
+}
+
+/* ============================================
+   THEME VARIABLES (Existing)
+   ============================================ */
+
 /* Theme Variables */
 :root {
   /* Default (Light) */

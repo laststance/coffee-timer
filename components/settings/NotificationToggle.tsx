@@ -2,12 +2,21 @@
 
 import { memo } from 'react'
 import { Bell, BellOff } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useNotificationStore } from '@/lib/stores/notificationStore'
 import useStore from '@/lib/hooks/useStore'
 import { useNotificationSupport } from '@/lib/hooks/useNotificationSupport'
 import { requestNotificationPermission } from '@/lib/notifications/notificationManager'
 
+/**
+ * NotificationToggle - Glass-styled notification toggle
+ *
+ * Features Apple's Liquid Glass design:
+ * - Glass container with subtle border
+ * - Glass toggle switch with smooth animations
+ * - Color tint for active state
+ */
 export const NotificationToggle = memo(function NotificationToggle() {
   const t = useTranslations('Notifications')
   const notificationState = useStore(useNotificationStore, (state) => state)
@@ -47,7 +56,9 @@ export const NotificationToggle = memo(function NotificationToggle() {
         {t('title')}
       </label>
 
-      <div className="flex items-center justify-between rounded-lg border border-bg-secondary bg-bg-secondary/50 p-4">
+      <div
+        className={`flex items-center justify-between rounded-xl glass glass-highlight p-4 transition-colors ${isActive ? 'glass-tint-green' : ''}`}
+      >
         <div className="flex items-center gap-3">
           {isActive ? (
             <Bell className="h-5 w-5 text-primary-green" />
@@ -66,22 +77,32 @@ export const NotificationToggle = memo(function NotificationToggle() {
           </div>
         </div>
 
-        <button
+        {/* Glass Toggle Switch */}
+        <motion.button
           onClick={handleToggle}
           disabled={isBlocked}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-            isActive ? 'bg-primary-green' : 'bg-gray-300'
+          className={`relative inline-flex h-7 w-12 items-center rounded-full glass glass-highlight transition-colors focus:outline-none focus:ring-2 focus:ring-primary-green/50 disabled:cursor-not-allowed disabled:opacity-50 ${
+            isActive ? 'glass-tint-green' : ''
           }`}
           role="switch"
           aria-checked={isActive}
           aria-label={t('title')}
+          whileTap={{ scale: 0.95 }}
         >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              isActive ? 'translate-x-6' : 'translate-x-1'
+          <motion.span
+            className={`inline-block h-5 w-5 rounded-full glass glass-elevated glass-highlight ${
+              isActive ? 'bg-primary-green/20' : ''
             }`}
+            animate={{
+              x: isActive ? 24 : 4,
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 500,
+              damping: 30,
+            }}
           />
-        </button>
+        </motion.button>
       </div>
     </div>
   )
