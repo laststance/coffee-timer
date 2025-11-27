@@ -1,0 +1,73 @@
+name: Visual Regression Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+      options: --user 1001
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Run Visual Regression Tests
+        run: |
+          npx playwright test e2e/visual-regression.spec.ts \
+            --project="Desktop-Light" \
+            --project="Desktop-Dark" \
+            --project="Desktop-Coffee" \
+            --project="Tablet-Light" \
+            --project="Tablet-Dark" \
+            --project="Tablet-Coffee" \
+            --project="Mobile-Light" \
+            --project="Mobile-Dark" \
+            --project="Mobile-Coffee" \
+            --reporter=html
+        continue-on-error: true
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-regression-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-regression-results
+          path: test-results/
+          retention-days: 30
+
+      - name: Upload snapshot diffs on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: snapshot-diffs
+          path: |
+            e2e/visual-regression.spec.ts-snapshots/*-diff.png
+            test-results/**/*-diff.png
+          retention-days: 7

@@ -1,0 +1,152 @@
+import { test, expect, Page } from '@playwright/test'
+
+/**
+ * Visual Regression Tests for Coffee Timer
+ *
+ * These tests capture screenshots of key application states to ensure
+ * visual consistency across themes and breakpoints. Baseline screenshots
+ * are auto-generated on first run.
+ *
+ * Coverage: 3 Themes (Light, Dark, Coffee) × 3 Breakpoints × 7 States
+ *
+ * Run: npx playwright test e2e/visual-regression.spec.ts
+ * Update baselines: npx playwright test e2e/visual-regression.spec.ts --update-snapshots
+ */
+
+/** Theme options for the application */
+type Theme = 'light' | 'dark' | 'coffee'
+
+/**
+ * Extracts theme name from Playwright project name
+ * @param projectName - Project name like "Desktop-Light", "Mobile-Dark", etc.
+ * @returns Theme name: 'light' | 'dark' | 'coffee'
+ */
+function getThemeFromProject(projectName: string): Theme {
+  if (projectName.includes('Light')) return 'light'
+  if (projectName.includes('Dark')) return 'dark'
+  return 'coffee'
+}
+
+/**
+ * Sets theme via localStorage before page load
+ * @param page - Playwright page object
+ * @param theme - Theme to apply
+ */
+async function setTheme(page: Page, theme: Theme): Promise<void> {
+  await page.addInitScript((t: string) => {
+    localStorage.setItem('theme', t)
+  }, theme)
+}
+
+test.describe('Visual Regression Tests', () => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    // Skip non-VRT projects (legacy projects without theme suffix)
+    const isVrtProject =
+      testInfo.project.name.includes('Light') ||
+      testInfo.project.name.includes('Dark') ||
+      testInfo.project.name.includes('Coffee')
+
+    if (!isVrtProject) {
+      test.skip()
+      return
+    }
+
+    const theme = getThemeFromProject(testInfo.project.name)
+    await setTheme(page, theme)
+  })
+
+  test('home page - initial state', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(500) // Wait for animations to settle
+
+    await expect(page).toHaveScreenshot('home-initial.png', { fullPage: true })
+  })
+
+  test('home page - timer display component', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    const timerDisplay = page.locator('[data-testid="timer-display"]')
+
+    // Fallback to timer container if testid not found
+    const timerContainer = timerDisplay.or(page.locator('.timer-container'))
+    const target =
+      (await timerDisplay.count()) > 0 ? timerDisplay : timerContainer
+
+    await expect(target.first()).toHaveScreenshot('timer-display.png')
+  })
+
+  test('settings dialog - open state', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    // Open settings dialog
+    await page.getByRole('button', { name: /settings/i }).click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+    await page.waitForTimeout(300) // Wait for dialog animation
+
+    await expect(page).toHaveScreenshot('settings-dialog.png', {
+      fullPage: true,
+    })
+  })
+
+  test('settings - sound selector dropdown', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    // Open settings dialog
+    await page.getByRole('button', { name: /settings/i }).click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+
+    // Open sound selector dropdown
+    await page.getByRole('combobox', { name: /select sound/i }).click()
+    await expect(page.getByRole('listbox')).toBeVisible()
+    await page.waitForTimeout(300)
+
+    await expect(page).toHaveScreenshot('sound-selector-open.png', {
+      fullPage: true,
+    })
+  })
+
+  test('settings - theme selector dropdown', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    // Open settings dialog
+    await page.getByRole('button', { name: /settings/i }).click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+
+    // Open theme selector dropdown
+    const themeSelector = page.getByTestId('theme-selector')
+    await themeSelector.click()
+    await page.waitForTimeout(300)
+
+    await expect(page).toHaveScreenshot('theme-selector-open.png', {
+      fullPage: true,
+    })
+  })
+
+  test('timer - paused state', async ({ page }) => {
+    await page.goto('/en')
+    await page.waitForLoadState('networkidle')
+
+    // Start and then pause the timer for consistent screenshot
+    await page.getByRole('button', { name: /start/i }).click()
+    await page.waitForTimeout(500)
+
+    // Pause to capture consistent state (avoids changing timer numbers)
+    await page.getByRole('button', { name: /pause/i }).click()
+    await page.waitForTimeout(300)
+
+    await expect(page).toHaveScreenshot('timer-paused.png', { fullPage: true })
+  })
+
+  test('language - Japanese locale', async ({ page }) => {
+    await page.goto('/ja')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(500)
+
+    await expect(page).toHaveScreenshot('home-japanese.png', { fullPage: true })
+  })
+})

@@ -1,0 +1,71 @@
+/**
+ * Screenshot Stabilization Styles
+ *
+ * These styles are applied during visual regression testing to ensure
+ * consistent and reproducible screenshots by disabling animations
+ * and hiding dynamic content.
+ *
+ * Usage: Reference this file with Playwright's stylePath option
+ */
+
+/* Disable all CSS animations and transitions */
+*,
+*::before,
+*::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* Disable specific animation classes */
+.animate-pulse,
+.animate-spin,
+.animate-bounce,
+.animate-ping {
+  animation: none !important;
+}
+
+/* Disable transition utilities */
+.transition,
+.transition-all,
+.transition-colors,
+.transition-opacity,
+.transition-shadow,
+.transition-transform {
+  transition: none !important;
+}
+
+/* Hide time-based dynamic content if present */
+[data-testid='current-time'],
+[data-testid='dynamic-content'] {
+  visibility: hidden !important;
+}
+
+/* Ensure consistent cursor state */
+* {
+  cursor: default !important;
+}
+
+/* Disable hover effects for consistent screenshots */
+*:hover {
+  transition: none !important;
+}
+
+/* Stabilize focus states */
+*:focus {
+  outline: none !important;
+}
+
+/* Ensure consistent scrollbar appearance */
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hide any loading spinners */
+.loading,
+.spinner,
+[data-loading='true'] {
+  visibility: hidden !important;
+}

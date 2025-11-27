@@ -11,6 +11,7 @@ interface LayoutBodyProps {
   children: React.ReactNode
   messages: AbstractIntlMessages
   locale: string
+  timeZone: string
 }
 
 /**
@@ -22,6 +23,7 @@ export const LayoutBody = memo(function LayoutBody({
   children,
   messages,
   locale,
+  timeZone,
 }: LayoutBodyProps) {
   return (
     <ThemeProvider attribute="data-theme" defaultTheme="coffee" enableSystem>
@@ -32,7 +34,11 @@ export const LayoutBody = memo(function LayoutBody({
       */}
       <ThemeColorUpdater />
       <ServiceWorkerRegistration />
-      <NextIntlClientProvider messages={messages} locale={locale}>
+      <NextIntlClientProvider
+        messages={messages}
+        locale={locale}
+        timeZone={timeZone}
+      >
         {children}
       </NextIntlClientProvider>
     </ThemeProvider>

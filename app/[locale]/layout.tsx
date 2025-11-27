@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { getMessages, getTimeZone, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { LayoutBody } from '@/components/LayoutBody'
@@ -139,11 +139,16 @@ export default async function LocaleLayout({
   // Providing all messages to the client
   // side is the easiest way to get started
   const messages = await getMessages()
+  const timeZone = await getTimeZone()
 
   return (
     <html lang={resolvedLocale} suppressHydrationWarning>
       <body className="bg-bg-primary text-text-primary antialiased ambient-bg min-h-screen">
-        <LayoutBody messages={messages} locale={resolvedLocale}>
+        <LayoutBody
+          messages={messages}
+          locale={resolvedLocale}
+          timeZone={timeZone}
+        >
           {children}
         </LayoutBody>
       </body>
