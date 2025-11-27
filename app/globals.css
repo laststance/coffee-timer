@@ -1,32 +1,150 @@
 @import 'tailwindcss';
 
 /* ============================================
-   LIQUID GLASS DESIGN SYSTEM
+   THEME VARIABLES (Original Themes - Solid Styling)
+   ============================================ */
+
+/* Default Theme Variables (Light) */
+:root {
+  /* Theme Colors */
+  --color-primary-green: #047857;
+  --color-primary-green-dark: #065f46;
+  --color-bg-primary: #faf9f6;
+  --color-bg-secondary: #f3f4f6;
+  --color-text-primary: #374151;
+  --color-text-secondary: #6b7280;
+  --color-accent-blue: #60a5fa;
+  --color-accent-amber: #fbbf24;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-circle-bg: #e5e7eb;
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  --progress-width: 0%;
+
+  /* Glass Variables - INACTIVE by default for original themes */
+  --glass-blur: 0px;
+  --glass-bg: transparent;
+  --glass-bg-medium: transparent;
+  --glass-bg-solid: transparent;
+  --glass-border: transparent;
+  --glass-border-highlight: transparent;
+  --glass-shadow: none;
+  --glass-shadow-elevated: none;
+  --glass-shadow-inset: none;
+  --glass-highlight: none;
+  --glass-highlight-soft: none;
+  --glass-tint-green: transparent;
+  --glass-tint-amber: transparent;
+  --glass-tint-red: transparent;
+  --glass-tint-blue: transparent;
+  --ambient-gradient: none;
+}
+
+/* Dark Theme (Solid Styling) */
+[data-theme='dark'] {
+  --color-primary-green: #10b981;
+  --color-primary-green-dark: #059669;
+  --color-bg-primary: #171717;
+  --color-bg-secondary: #262626;
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a3a3a3;
+  --color-accent-blue: #60a5fa;
+  --color-accent-amber: #fbbf24;
+  --color-gray-500: #9ca3af;
+  --color-gray-600: #d1d5db;
+  --color-gray-700: #e5e5e5;
+  --color-circle-bg: #404040;
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+
+  /* Glass Variables - INACTIVE for dark theme */
+  --glass-blur: 0px;
+  --glass-bg: transparent;
+  --glass-bg-medium: transparent;
+  --glass-bg-solid: transparent;
+  --glass-border: transparent;
+  --glass-border-highlight: transparent;
+  --glass-shadow: none;
+  --glass-shadow-elevated: none;
+  --glass-shadow-inset: none;
+  --glass-highlight: none;
+  --glass-highlight-soft: none;
+  --glass-tint-green: transparent;
+  --glass-tint-amber: transparent;
+  --glass-tint-red: transparent;
+  --glass-tint-blue: transparent;
+  --ambient-gradient: none;
+}
+
+/* Coffee Theme (Solid Styling) */
+[data-theme='coffee'] {
+  --color-primary-green: #5d4037;
+  --color-primary-green-dark: #3e2723;
+  --color-bg-primary: #efebe9;
+  --color-bg-secondary: #d7ccc8;
+  --color-text-primary: #3e2723;
+  --color-text-secondary: #5d4037;
+  --color-accent-blue: #8d6e63;
+  --color-accent-amber: #d4a373;
+  --color-gray-500: #8d6e63;
+  --color-gray-600: #6d4c41;
+  --color-gray-700: #4e342e;
+  --color-circle-bg: #d7ccc8;
+  --shadow-soft: 0 4px 6px -1px rgba(62, 39, 35, 0.1);
+
+  /* Glass Variables - INACTIVE for coffee theme */
+  --glass-blur: 0px;
+  --glass-bg: transparent;
+  --glass-bg-medium: transparent;
+  --glass-bg-solid: transparent;
+  --glass-border: transparent;
+  --glass-border-highlight: transparent;
+  --glass-shadow: none;
+  --glass-shadow-elevated: none;
+  --glass-shadow-inset: none;
+  --glass-highlight: none;
+  --glass-highlight-soft: none;
+  --glass-tint-green: transparent;
+  --glass-tint-amber: transparent;
+  --glass-tint-red: transparent;
+  --glass-tint-blue: transparent;
+  --ambient-gradient: none;
+}
+
+/* ============================================
+   LIQUID GLASS THEMES (With Glass Effects)
    Based on Apple WWDC 2025 Liquid Glass principles
    ============================================ */
 
-/* Liquid Glass Core Variables */
-:root {
-  /* Glass Blur Levels */
+/* Liquid Glass Light Theme */
+[data-theme='liquid-glass-light'] {
+  /* Theme Colors (same as light) */
+  --color-primary-green: #047857;
+  --color-primary-green-dark: #065f46;
+  --color-bg-primary: #faf9f6;
+  --color-bg-secondary: #f3f4f6;
+  --color-text-primary: #374151;
+  --color-text-secondary: #6b7280;
+  --color-accent-blue: #60a5fa;
+  --color-accent-amber: #fbbf24;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-circle-bg: #e5e7eb;
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+
+  /* Glass Variables - ACTIVE */
   --glass-blur-light: 10px;
   --glass-blur: 20px;
   --glass-blur-heavy: 40px;
-
-  /* Glass Background (Light Mode) */
   --glass-bg: rgba(255, 255, 255, 0.15);
   --glass-bg-medium: rgba(255, 255, 255, 0.25);
   --glass-bg-solid: rgba(255, 255, 255, 0.85);
-
-  /* Glass Borders */
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-border-highlight: rgba(255, 255, 255, 0.4);
-
-  /* Glass Shadows */
   --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
   --glass-shadow-elevated: 0 12px 40px rgba(31, 38, 135, 0.2);
   --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.15);
-
-  /* Specular Highlights */
   --glass-highlight: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.4) 0%,
@@ -37,14 +155,10 @@
     rgba(255, 255, 255, 0.2) 0%,
     transparent 100%
   );
-
-  /* Tint Colors (for state indication) */
   --glass-tint-green: rgba(16, 185, 129, 0.15);
   --glass-tint-amber: rgba(251, 191, 36, 0.15);
   --glass-tint-red: rgba(239, 68, 68, 0.15);
   --glass-tint-blue: rgba(96, 165, 250, 0.15);
-
-  /* Ambient Background Gradients */
   --ambient-gradient:
     radial-gradient(
       circle at 20% 80%,
@@ -63,8 +177,27 @@
     );
 }
 
-/* Dark Mode Glass Variables */
-[data-theme='dark'] {
+/* Liquid Glass Dark Theme */
+[data-theme='liquid-glass-dark'] {
+  /* Theme Colors (same as dark) */
+  --color-primary-green: #10b981;
+  --color-primary-green-dark: #059669;
+  --color-bg-primary: #171717;
+  --color-bg-secondary: #262626;
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a3a3a3;
+  --color-accent-blue: #60a5fa;
+  --color-accent-amber: #fbbf24;
+  --color-gray-500: #9ca3af;
+  --color-gray-600: #d1d5db;
+  --color-gray-700: #e5e5e5;
+  --color-circle-bg: #404040;
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+
+  /* Glass Variables - ACTIVE */
+  --glass-blur-light: 10px;
+  --glass-blur: 20px;
+  --glass-blur-heavy: 40px;
   --glass-bg: rgba(30, 30, 30, 0.25);
   --glass-bg-medium: rgba(40, 40, 40, 0.35);
   --glass-bg-solid: rgba(30, 30, 30, 0.9);
@@ -105,8 +238,27 @@
     );
 }
 
-/* Coffee Theme Glass Variables */
-[data-theme='coffee'] {
+/* Liquid Glass Coffee Theme */
+[data-theme='liquid-glass-coffee'] {
+  /* Theme Colors (same as coffee) */
+  --color-primary-green: #5d4037;
+  --color-primary-green-dark: #3e2723;
+  --color-bg-primary: #efebe9;
+  --color-bg-secondary: #d7ccc8;
+  --color-text-primary: #3e2723;
+  --color-text-secondary: #5d4037;
+  --color-accent-blue: #8d6e63;
+  --color-accent-amber: #d4a373;
+  --color-gray-500: #8d6e63;
+  --color-gray-600: #6d4c41;
+  --color-gray-700: #4e342e;
+  --color-circle-bg: #d7ccc8;
+  --shadow-soft: 0 4px 6px -1px rgba(62, 39, 35, 0.1);
+
+  /* Glass Variables - ACTIVE */
+  --glass-blur-light: 10px;
+  --glass-blur: 20px;
+  --glass-blur-heavy: 40px;
   --glass-bg: rgba(239, 235, 233, 0.2);
   --glass-bg-medium: rgba(239, 235, 233, 0.35);
   --glass-bg-solid: rgba(239, 235, 233, 0.9);
@@ -249,15 +401,15 @@
 /* Clear Glass (more transparent, for media backgrounds) */
 .glass-clear {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(var(--glass-blur-light)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-light)) saturate(150%);
+  backdrop-filter: blur(var(--glass-blur-light, 10px)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-light, 10px)) saturate(150%);
 }
 
-[data-theme='dark'] .glass-clear {
+[data-theme='liquid-glass-dark'] .glass-clear {
   background: rgba(0, 0, 0, 0.15);
 }
 
-[data-theme='coffee'] .glass-clear {
+[data-theme='liquid-glass-coffee'] .glass-clear {
   background: rgba(239, 235, 233, 0.1);
 }
 
@@ -313,61 +465,8 @@
 }
 
 /* ============================================
-   THEME VARIABLES (Existing)
+   TAILWIND V4 THEME CONFIGURATION
    ============================================ */
-
-/* Theme Variables */
-:root {
-  /* Default (Light) */
-  --color-primary-green: #047857;
-  --color-primary-green-dark: #065f46;
-  --color-bg-primary: #faf9f6;
-  --color-bg-secondary: #f3f4f6;
-  --color-text-primary: #374151;
-  --color-text-secondary: #6b7280;
-  --color-accent-blue: #60a5fa;
-  --color-accent-amber: #fbbf24;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-circle-bg: #e5e7eb;
-  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-  --progress-width: 0%;
-}
-
-[data-theme='dark'] {
-  --color-primary-green: #10b981;
-  --color-primary-green-dark: #059669;
-  --color-bg-primary: #171717;
-  --color-bg-secondary: #262626;
-  --color-text-primary: #e5e5e5;
-  --color-text-secondary: #a3a3a3;
-  --color-accent-blue: #60a5fa;
-  --color-accent-amber: #fbbf24;
-  --color-gray-500: #9ca3af;
-  --color-gray-600: #d1d5db;
-  --color-gray-700: #e5e5e5;
-  --color-circle-bg: #404040;
-  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.5);
-}
-
-[data-theme='coffee'] {
-  --color-primary-green: #5d4037; /* Espresso */
-  --color-primary-green-dark: #3e2723;
-  --color-bg-primary: #efebe9; /* Latte */
-  --color-bg-secondary: #d7ccc8; /* Darker Latte */
-  --color-text-primary: #3e2723; /* Dark Bean */
-  --color-text-secondary: #5d4037; /* Medium Bean */
-  --color-accent-blue: #8d6e63;
-  --color-accent-amber: #d4a373; /* Caramel */
-  --color-gray-500: #8d6e63;
-  --color-gray-600: #6d4c41;
-  --color-gray-700: #4e342e;
-  --color-circle-bg: #d7ccc8;
-  --shadow-soft: 0 4px 6px -1px rgba(62, 39, 35, 0.1);
-}
-
-/* Tailwind v4 Theme Configuration */
 @theme {
   /* Primary Colors */
   --color-primary-green: var(--color-primary-green);

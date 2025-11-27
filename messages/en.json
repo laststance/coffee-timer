@@ -32,6 +32,9 @@
       "light": "Light",
       "dark": "Dark",
       "coffee": "Coffee",
+      "liquid-glass-light": "Glass Light",
+      "liquid-glass-dark": "Glass Dark",
+      "liquid-glass-coffee": "Glass Coffee",
       "system": "System"
     }
   },
