@@ -18,14 +18,14 @@ import { useMounted } from '@/lib/hooks/useMounted'
 /**
  * ThemeSelector - Theme-aware theme selector component
  *
- * For original themes (light/dark/coffee):
- * - Shows only 4 original themes (light, dark, coffee, system)
- * - Uses standard solid styling with borders
- * - Maintains original visual appearance for VRT compatibility
+ * All themes show all 7 options in dropdown:
+ * - light, dark, coffee (original solid themes)
+ * - liquid-glass-light, liquid-glass-dark, liquid-glass-coffee (glass themes)
+ * - system (auto-detect)
  *
- * For Liquid Glass themes:
- * - Shows all 7 themes including liquid-glass variants
- * - Uses glass styling with backdrop blur
+ * Styling differs based on current theme:
+ * - Original themes: solid styling with borders
+ * - Liquid Glass themes: glass styling with backdrop blur
  */
 export const ThemeSelector = React.memo(function ThemeSelector() {
   const { theme, resolvedTheme, setTheme } = useTheme()
@@ -39,18 +39,16 @@ export const ThemeSelector = React.memo(function ThemeSelector() {
   // Check if current theme is a liquid-glass variant
   const isLiquidGlass = resolvedTheme?.startsWith('liquid-glass') ?? false
 
-  // Original themes list (for original theme mode)
-  const originalThemes = ['light', 'dark', 'coffee', 'system']
-
-  // All themes including liquid-glass variants (for liquid-glass mode)
+  // All themes including liquid-glass variants
+  // Order: original themes first, then system, then liquid-glass variants
   const allThemes = [
     'light',
     'dark',
     'coffee',
+    'system',
     'liquid-glass-light',
     'liquid-glass-dark',
     'liquid-glass-coffee',
-    'system',
   ]
 
   const getIcon = (value: string) => {
@@ -116,7 +114,7 @@ export const ThemeSelector = React.memo(function ThemeSelector() {
               sideOffset={5}
             >
               <Select.Viewport className="p-1">
-                {originalThemes.map((item) => (
+                {allThemes.map((item) => (
                   <Select.Item
                     key={item}
                     value={item}
@@ -124,7 +122,11 @@ export const ThemeSelector = React.memo(function ThemeSelector() {
                   >
                     <Select.ItemText>
                       <div className="flex items-center gap-2">
-                        {getIcon(item)}
+                        {isLiquidGlassTheme(item) ? (
+                          <Sparkles className="h-4 w-4" />
+                        ) : (
+                          getIcon(item)
+                        )}
                         <span>{t(`Themes.${item}`)}</span>
                       </div>
                     </Select.ItemText>
