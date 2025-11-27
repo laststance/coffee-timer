@@ -237,6 +237,15 @@
   background: var(--glass-tint-amber);
 }
 
+/* Data State Tint Variants (for Radix UI Select) */
+.data-\[state\=checked\]\:glass-tint-green[data-state='checked'] {
+  background: var(--glass-tint-green);
+}
+
+.data-\[highlighted\]\:glass-tint-green\/50[data-highlighted] {
+  background: rgba(16, 185, 129, 0.075);
+}
+
 /* Clear Glass (more transparent, for media backgrounds) */
 .glass-clear {
   background: rgba(255, 255, 255, 0.08);
