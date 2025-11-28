@@ -154,12 +154,12 @@
   --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.15);
   --glass-highlight: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.5) 0%,
     transparent 50%
   );
   --glass-highlight-soft: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.3) 0%,
     transparent 100%
   );
   --glass-tint-green: rgba(16, 185, 129, 0.15);
