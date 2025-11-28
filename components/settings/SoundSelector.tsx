@@ -204,7 +204,7 @@ export const SoundSelector = React.memo(function SoundSelector({
                   <div className="flex items-center justify-between rounded-xl px-2 py-1">
                     <Select.Item
                       value={preset}
-                      className="relative flex-1 cursor-pointer rounded-xl pl-8 pr-4 py-2 text-sm text-text-primary outline-none transition-colors data-[state=checked]:glass-tint-green data-[state=checked]:text-primary-green data-[highlighted]:glass-tint-green/50"
+                      className="relative flex-1 cursor-pointer rounded-xl pl-8 pr-4 py-2 text-sm text-text-primary outline-none transition-colors hover:glass-tint-green data-[state=checked]:glass-tint-green data-[state=checked]:text-primary-green data-[highlighted]:glass-tint-green"
                     >
                       <Select.ItemText>{tPresets(preset)}</Select.ItemText>
                       <Select.ItemIndicator className="absolute left-2 inline-flex items-center">

@@ -176,7 +176,7 @@ export const ThemeSelector = React.memo(function ThemeSelector() {
                 <Select.Item
                   key={item}
                   value={item}
-                  className="relative flex cursor-pointer items-center rounded-xl py-2 pl-8 pr-4 text-sm text-text-primary outline-none transition-colors data-[state=checked]:glass-tint-green data-[state=checked]:text-primary-green data-[highlighted]:glass-tint-green/50"
+                  className="relative flex cursor-pointer items-center rounded-xl py-2 pl-8 pr-4 text-sm text-text-primary outline-none transition-colors hover:glass-tint-green data-[state=checked]:glass-tint-green data-[state=checked]:text-primary-green data-[highlighted]:glass-tint-green"
                 >
                   <Select.ItemText>
                     <div className="flex items-center gap-2">

@@ -119,8 +119,12 @@ export const SettingsPanel = memo(function SettingsPanel({
 
             {/* Glass Dialog Content - Flexbox centering wrapper */}
             <Dialog.Content asChild>
-              <div className="fixed inset-0 flex items-center justify-center p-4">
+              <div
+                className="fixed inset-0 flex items-center justify-center p-4"
+                onClick={onClose}
+              >
                 <motion.div
+                  onClick={(e) => e.stopPropagation()}
                   data-testid="settings-panel"
                   className="flex max-h-[85vh] w-[90vw] max-w-md flex-col overflow-hidden rounded-3xl glass glass-elevated glass-highlight focus:outline-none"
                   initial={{ opacity: 0, scale: 0.95 }}

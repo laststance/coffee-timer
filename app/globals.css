@@ -493,8 +493,17 @@
   background: var(--glass-tint-amber);
 }
 
+/* Hover Tint Variants (for dropdown items) */
+.hover\:glass-tint-green:hover {
+  background: var(--glass-tint-green);
+}
+
 /* Data State Tint Variants (for Radix UI Select) */
 .data-\[state\=checked\]\:glass-tint-green[data-state='checked'] {
+  background: var(--glass-tint-green);
+}
+
+.data-\[highlighted\]\:glass-tint-green[data-highlighted] {
   background: var(--glass-tint-green);
 }
 
