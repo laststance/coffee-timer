@@ -493,6 +493,10 @@
   background: var(--glass-tint-amber);
 }
 
+.focus\:glass-tint-blue:focus {
+  background: var(--glass-tint-blue);
+}
+
 /* Hover Tint Variants (for dropdown items) */
 .hover\:glass-tint-green:hover {
   background: var(--glass-tint-green);

@@ -61,7 +61,7 @@ export const TimeInput = memo(function TimeInput({
     px-4 py-3 text-center text-2xl font-semibold
     text-text-primary
     transition-all duration-200
-    focus:glass-tint-green focus:outline-none focus:ring-2 focus:ring-primary-green/50
+    focus:glass-tint-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/50
     disabled:cursor-not-allowed disabled:opacity-50
     [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
   `
