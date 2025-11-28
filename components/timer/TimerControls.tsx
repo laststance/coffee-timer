@@ -89,7 +89,7 @@ export const TimerControls = memo(function TimerControls({
       variant="elevated"
       shape="capsule"
       highlight
-      className="px-3 py-3"
+      className="px-3 py-4 md:py-3"
     >
       <div className="flex items-center justify-center gap-3">
         {/* Start/Pause Button */}
