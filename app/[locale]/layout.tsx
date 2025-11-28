@@ -143,7 +143,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={resolvedLocale} suppressHydrationWarning>
-      <body className="bg-bg-primary text-text-primary antialiased">
+      <body className="bg-bg-primary text-text-primary antialiased ambient-bg min-h-screen">
         <LayoutBody
           messages={messages}
           locale={resolvedLocale}

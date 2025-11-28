@@ -23,7 +23,7 @@ export default defineConfig({
   },
 
   projects: [
-    // ===== DESKTOP PROJECTS =====
+    // ===== DESKTOP PROJECTS (Original Themes) =====
     {
       name: 'Desktop-Light',
       use: {
@@ -45,7 +45,29 @@ export default defineConfig({
       },
     },
 
-    // ===== TABLET PROJECTS =====
+    // ===== DESKTOP PROJECTS (Liquid Glass Themes) =====
+    {
+      name: 'Desktop-LiquidGlassLight',
+      use: {
+        ...devices['Desktop Chrome'],
+        colorScheme: 'light',
+      },
+    },
+    {
+      name: 'Desktop-LiquidGlassDark',
+      use: {
+        ...devices['Desktop Chrome'],
+        colorScheme: 'dark',
+      },
+    },
+    {
+      name: 'Desktop-LiquidGlassCoffee',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+
+    // ===== TABLET PROJECTS (Original Themes) =====
     {
       name: 'Tablet-Light',
       use: {
@@ -67,7 +89,29 @@ export default defineConfig({
       },
     },
 
-    // ===== MOBILE PROJECTS =====
+    // ===== TABLET PROJECTS (Liquid Glass Themes) =====
+    {
+      name: 'Tablet-LiquidGlassLight',
+      use: {
+        ...devices['iPad Pro landscape'],
+        colorScheme: 'light',
+      },
+    },
+    {
+      name: 'Tablet-LiquidGlassDark',
+      use: {
+        ...devices['iPad Pro landscape'],
+        colorScheme: 'dark',
+      },
+    },
+    {
+      name: 'Tablet-LiquidGlassCoffee',
+      use: {
+        ...devices['iPad Pro landscape'],
+      },
+    },
+
+    // ===== MOBILE PROJECTS (Original Themes) =====
     {
       name: 'Mobile-Light',
       use: {
@@ -84,6 +128,28 @@ export default defineConfig({
     },
     {
       name: 'Mobile-Coffee',
+      use: {
+        ...devices['iPhone 12'],
+      },
+    },
+
+    // ===== MOBILE PROJECTS (Liquid Glass Themes) =====
+    {
+      name: 'Mobile-LiquidGlassLight',
+      use: {
+        ...devices['iPhone 12'],
+        colorScheme: 'light',
+      },
+    },
+    {
+      name: 'Mobile-LiquidGlassDark',
+      use: {
+        ...devices['iPhone 12'],
+        colorScheme: 'dark',
+      },
+    },
+    {
+      name: 'Mobile-LiquidGlassCoffee',
       use: {
         ...devices['iPhone 12'],
       },

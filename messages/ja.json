@@ -32,6 +32,9 @@
       "light": "ライト",
       "dark": "ダーク",
       "coffee": "コーヒー",
+      "liquid-glass-light": "グラス ライト",
+      "liquid-glass-dark": "グラス ダーク",
+      "liquid-glass-coffee": "グラス コーヒー",
       "system": "システム"
     }
   },

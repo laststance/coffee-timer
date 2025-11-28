@@ -21,8 +21,10 @@ test.describe('Theme Switcher', () => {
     await expect(themeSelector).toBeVisible()
 
     // Test Dark Theme
+    // Use dispatchEvent to handle mobile viewport where options may be outside viewport
     await themeSelector.click()
-    await page.getByRole('option', { name: /dark/i }).click()
+    const darkOption = page.getByRole('option', { name: 'Dark', exact: true })
+    await darkOption.dispatchEvent('click')
 
     // Verify HTML attribute
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
@@ -39,7 +41,8 @@ test.describe('Theme Switcher', () => {
 
     // Test Light Theme
     await themeSelector.click()
-    await page.getByRole('option', { name: /light/i }).click()
+    const lightOption = page.getByRole('option', { name: 'Light', exact: true })
+    await lightOption.dispatchEvent('click')
 
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     await page.waitForTimeout(500)
@@ -53,7 +56,11 @@ test.describe('Theme Switcher', () => {
 
     // Test Switch back to Coffee Theme
     await themeSelector.click()
-    await page.getByRole('option', { name: /coffee/i }).click()
+    const coffeeOption = page.getByRole('option', {
+      name: 'Coffee',
+      exact: true,
+    })
+    await coffeeOption.dispatchEvent('click')
 
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'coffee')
     await page.waitForTimeout(500)

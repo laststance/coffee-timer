@@ -3,7 +3,9 @@
 import * as React from 'react'
 import * as Select from '@radix-ui/react-select'
 import { Check, ChevronDown, Play } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { useTheme } from 'next-themes'
 import type { SoundPreset } from '@/lib/stores/settingsStore'
 import { SUPPORTED_SOUND_PRESETS, audioManager } from '@/lib/audio/audioManager'
 import { useSettingsStore } from '@/lib/stores/settingsStore'
@@ -21,18 +23,34 @@ const SOUND_OPTIONS = [
 ] as const satisfies ReadonlyArray<SoundPreset>
 const FALLBACK_SOUND = SUPPORTED_SOUND_PRESETS[0]
 
+/**
+ * SoundSelector - Theme-aware sound preset selector
+ *
+ * For Liquid Glass themes:
+ * - Glass trigger button with backdrop blur
+ * - Glass dropdown content with elevated shadow
+ * - Interactive preview buttons with glass styling
+ *
+ * For original themes (light/dark/coffee):
+ * - Standard solid styling with borders
+ * - Maintains original visual appearance
+ */
 export const SoundSelector = React.memo(function SoundSelector({
   value,
   onChange,
 }: SoundSelectorProps) {
   const t = useTranslations('Settings')
   const tPresets = useTranslations('SoundPresets')
+  const { resolvedTheme } = useTheme()
   const volume = useStore(useSettingsStore, (state) => state.volume) ?? 70
   const isValueSupported = React.useMemo(
     () => SOUND_OPTIONS.includes(value),
     [value],
   )
   const safeValue = isValueSupported ? value : FALLBACK_SOUND
+
+  // Check if current theme is a liquid-glass variant
+  const isLiquidGlass = resolvedTheme?.startsWith('liquid-glass') ?? false
 
   // Track preview playback state
   const [previewingSound, setPreviewingSound] =
@@ -72,6 +90,90 @@ export const SoundSelector = React.memo(function SoundSelector({
 
   const currentLabel = tPresets(safeValue)
 
+  // For original themes: render standard selector
+  if (!isLiquidGlass) {
+    return (
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-text-primary">
+          {t('sound')}
+        </label>
+
+        <Select.Root value={safeValue} onValueChange={onChange}>
+          <Select.Trigger
+            data-testid="sound-selector"
+            className="flex w-full items-center justify-between rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-left text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
+            aria-label={t('selectSound')}
+          >
+            <Select.Value>{currentLabel}</Select.Value>
+            <Select.Icon>
+              <ChevronDown className="h-4 w-4 text-text-secondary" />
+            </Select.Icon>
+          </Select.Trigger>
+
+          <Select.Portal>
+            <Select.Content
+              className="overflow-auto max-h-48 md:max-h-64 rounded-lg border-2 border-bg-secondary bg-bg-primary shadow-lg"
+              position="popper"
+              sideOffset={5}
+            >
+              <Select.Viewport className="p-1">
+                {SOUND_OPTIONS.map((preset) => (
+                  <div key={preset} className="relative flex flex-col">
+                    <div className="flex items-center justify-between rounded-md px-2 py-2">
+                      <Select.Item
+                        value={preset}
+                        className="relative flex-1 cursor-pointer rounded-md pl-8 pr-4 py-1 text-sm text-text-primary outline-none data-[state=checked]:bg-primary-green data-[state=checked]:text-white data-[highlighted]:bg-gray-100"
+                      >
+                        <Select.ItemText>{tPresets(preset)}</Select.ItemText>
+                        <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
+                          <Check className="h-4 w-4" />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+
+                      {preset !== 'none' && (
+                        <button
+                          type="button"
+                          data-testid="sound-preview-button"
+                          onPointerDown={(e) => handlePreview(e, preset)}
+                          className="ml-2 rounded p-3 min-w-11 min-h-11 flex items-center justify-center text-text-primary hover:bg-bg-secondary hover:text-primary-green transition-colors"
+                          aria-label={t('previewSound', {
+                            sound: tPresets(preset),
+                          })}
+                        >
+                          <Play className="h-4 w-4 fill-current" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Progress bar - shown when this sound is previewing */}
+                    {previewingSound === preset && (
+                      <div className="mx-2 mb-2 px-2">
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-secondary">
+                          <motion.div
+                            className="h-full rounded-full bg-primary-green"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${previewProgress}%` }}
+                            transition={{ duration: 0.1 }}
+                            role="progressbar"
+                            aria-valuenow={Math.round(previewProgress)}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            aria-label={t('previewProgress')}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
+      </div>
+    )
+  }
+
+  // For Liquid Glass themes: render glass selector
   return (
     <div className="space-y-3">
       <label className="text-sm font-medium text-text-primary">
@@ -81,7 +183,7 @@ export const SoundSelector = React.memo(function SoundSelector({
       <Select.Root value={safeValue} onValueChange={onChange}>
         <Select.Trigger
           data-testid="sound-selector"
-          className="flex w-full items-center justify-between rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-left text-text-primary shadow-soft transition-colors hover:border-primary-green focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green"
+          className="flex w-full items-center justify-between rounded-xl glass glass-highlight px-4 py-3 text-left text-text-primary transition-all hover:glass-tint-green focus:outline-none focus:ring-2 focus:ring-primary-green/50"
           aria-label={t('selectSound')}
         >
           <Select.Value>{currentLabel}</Select.Value>
@@ -92,17 +194,17 @@ export const SoundSelector = React.memo(function SoundSelector({
 
         <Select.Portal>
           <Select.Content
-            className="overflow-auto max-h-48 md:max-h-64 rounded-lg border-2 border-bg-secondary bg-bg-primary shadow-lg"
+            className="overflow-auto max-h-48 md:max-h-64 rounded-2xl glass glass-elevated glass-highlight"
             position="popper"
             sideOffset={5}
           >
-            <Select.Viewport className="p-1">
+            <Select.Viewport className="p-2">
               {SOUND_OPTIONS.map((preset) => (
                 <div key={preset} className="relative flex flex-col">
-                  <div className="flex items-center justify-between rounded-md px-2 py-2">
+                  <div className="flex items-center justify-between rounded-xl px-2 py-1">
                     <Select.Item
                       value={preset}
-                      className="relative flex-1 cursor-pointer rounded-md pl-8 pr-4 py-1 text-sm text-text-primary outline-none data-[state=checked]:bg-primary-green data-[state=checked]:text-white data-[highlighted]:bg-gray-100"
+                      className="relative flex-1 cursor-pointer rounded-xl pl-8 pr-4 py-2 text-sm text-text-primary outline-none transition-colors data-[state=checked]:glass-tint-green data-[state=checked]:text-primary-green data-[highlighted]:glass-tint-green/50"
                     >
                       <Select.ItemText>{tPresets(preset)}</Select.ItemText>
                       <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
@@ -111,31 +213,31 @@ export const SoundSelector = React.memo(function SoundSelector({
                     </Select.Item>
 
                     {preset !== 'none' && (
-                      <button
+                      <motion.button
                         type="button"
                         data-testid="sound-preview-button"
                         onPointerDown={(e) => handlePreview(e, preset)}
-                        className="ml-2 rounded p-3 min-w-11 min-h-11 flex items-center justify-center text-text-primary hover:bg-bg-secondary hover:text-primary-green transition-colors"
+                        className="ml-2 rounded-full p-2 min-w-10 min-h-10 flex items-center justify-center glass glass-highlight text-text-primary transition-colors"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
                         aria-label={t('previewSound', {
                           sound: tPresets(preset),
                         })}
                       >
                         <Play className="h-4 w-4 fill-current" />
-                      </button>
+                      </motion.button>
                     )}
                   </div>
 
                   {/* Progress bar - shown when this sound is previewing */}
                   {previewingSound === preset && (
                     <div className="mx-2 mb-2 px-2">
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-secondary">
-                        <div
-                          className="h-full rounded-full bg-primary-green progress-bar"
-                          style={
-                            {
-                              '--progress-width': `${previewProgress}%`,
-                            } as React.CSSProperties
-                          }
+                      <div className="h-1.5 w-full overflow-hidden rounded-full glass">
+                        <motion.div
+                          className="h-full rounded-full bg-primary-green"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${previewProgress}%` }}
+                          transition={{ duration: 0.1 }}
                           role="progressbar"
                           aria-valuenow={Math.round(previewProgress)}
                           aria-valuemin={0}
