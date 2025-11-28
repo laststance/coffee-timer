@@ -275,8 +275,8 @@
   --glass-bg: rgba(239, 235, 233, 0.2);
   --glass-bg-medium: rgba(239, 235, 233, 0.35);
   --glass-bg-solid: rgba(239, 235, 233, 0.9);
-  --glass-border: rgba(141, 110, 99, 0.2);
-  --glass-border-highlight: rgba(141, 110, 99, 0.35);
+  --glass-border: rgba(141, 110, 99, 0.25);
+  --glass-border-highlight: rgba(141, 110, 99, 0.4);
   --glass-shadow: 0 8px 32px rgba(62, 39, 35, 0.15);
   --glass-shadow-elevated: 0 12px 40px rgba(62, 39, 35, 0.2);
   --glass-shadow-inset: inset 0 2px 20px rgba(255, 255, 255, 0.12);
