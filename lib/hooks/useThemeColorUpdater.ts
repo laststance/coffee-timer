@@ -2,11 +2,22 @@ import { useEffect } from 'react'
 
 /**
  * Theme color mapping for Coffee Timer themes.
+ * Maps theme names to their corresponding browser chrome colors.
+ *
+ * - Light themes: #047857 (darker emerald green for good contrast)
+ * - Dark themes: #000000 (black for clean dark appearance)
+ * - Coffee themes: #5d4037 (espresso brown, warm café aesthetic)
+ *
+ * Liquid Glass themes inherit the same PWA header colors as their base themes
+ * since the glass effects are visual overlays that don't affect browser chrome.
  */
 const THEME_COLORS = {
   light: '#047857',
   dark: '#000000',
   coffee: '#5d4037',
+  'liquid-glass-light': '#047857',
+  'liquid-glass-dark': '#000000',
+  'liquid-glass-coffee': '#5d4037',
 } as const
 
 /**
