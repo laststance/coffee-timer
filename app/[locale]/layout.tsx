@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getMessages, getTimeZone, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { Analytics } from '@vercel/analytics/next'
 import { routing } from '@/i18n/routing'
 import { LayoutBody } from '@/components/LayoutBody'
 import '../globals.css'
@@ -151,6 +152,7 @@ export default async function LocaleLayout({
         >
           {children}
         </LayoutBody>
+        <Analytics />
       </body>
     </html>
   )
