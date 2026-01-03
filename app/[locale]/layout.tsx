@@ -110,14 +110,7 @@ const isSupportedLocale = (
 /**
  * LocaleLayout - Server Component for locale-specific layout.
  * Renders html and body tags with LayoutBody client component for providers.
- *
- * Note: This is an async Server Component in Next.js 15.
- * React.memo() cannot be applied because:
- * 1. Server Components don't re-render on the client (no memoization benefit)
- * 2. React.memo() expects synchronous function components
- * 3. The async pattern is required for Next.js 15's params Promise API
  */
-// eslint-disable-next-line @laststance/react-next/all-memo -- Async Server Component cannot use React.memo
 export default async function LocaleLayout({
   children,
   params,
