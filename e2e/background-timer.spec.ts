@@ -315,8 +315,9 @@ test.describe('Background Timer Functionality', () => {
     const startButton = page.getByRole('button', { name: /start/i })
     await expect(startButton).toBeVisible()
 
-    // Verify inputs also persisted
-    await expect(minutesInput).toHaveValue('0')
-    await expect(secondsInput).toHaveValue('10')
+    // Verify inputs also persisted (GlassNumberStepper uses zero-padded display)
+    // Add explicit timeout for Zustand hydration race condition on slow CI
+    await expect(minutesInput).toHaveValue('00', { timeout: 3000 })
+    await expect(secondsInput).toHaveValue('10', { timeout: 3000 })
   })
 })
