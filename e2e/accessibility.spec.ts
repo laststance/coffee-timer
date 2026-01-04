@@ -67,11 +67,17 @@ test.describe('Accessibility Tests', () => {
     await page.goto('/en')
 
     // Check for minute and second inputs with labels
-    const minuteInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondInput = page.getByRole('spinbutton', { name: /seconds/i })
+    // GlassNumberStepper uses type="text" with inputMode="numeric" instead of type="number"
+    // so we use data-testid selectors instead of spinbutton role
+    const minuteInput = page.getByTestId('time-input-minutes')
+    const secondInput = page.getByTestId('time-input-seconds')
 
     await expect(minuteInput).toBeVisible()
     await expect(secondInput).toBeVisible()
+
+    // Verify aria-label is set for accessibility
+    await expect(minuteInput).toHaveAttribute('aria-label', 'Minutes')
+    await expect(secondInput).toHaveAttribute('aria-label', 'Seconds')
   })
 
   test('color contrast meets WCAG AA standards', async ({ page }) => {

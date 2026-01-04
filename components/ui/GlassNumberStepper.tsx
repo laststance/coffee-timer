@@ -268,7 +268,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           aria-label={`Decrease ${label || 'value'}`}
           className={`
             flex items-center justify-center
-            w-10 h-14
+            w-12 h-14
             bg-bg-secondary
             text-text-primary
             transition-colors duration-200
@@ -316,7 +316,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           aria-label={`Increase ${label || 'value'}`}
           className={`
             flex items-center justify-center
-            w-10 h-14
+            w-12 h-14
             bg-bg-secondary
             text-text-primary
             transition-colors duration-200
