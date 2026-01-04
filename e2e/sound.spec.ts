@@ -115,8 +115,8 @@ test.describe('Sound Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a short timer (3 seconds - longer for more reliable testing)
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     // Clear existing values first
     await minutesInput.click()
@@ -191,8 +191,8 @@ test.describe('Sound Functionality', () => {
     await page.waitForTimeout(500)
 
     // Set a short timer (3 seconds)
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.click()
     await minutesInput.fill('0')
@@ -265,8 +265,8 @@ test.describe('Sound Functionality', () => {
     await doneButton.click()
 
     // Set a short timer (3 seconds)
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('3')

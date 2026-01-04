@@ -26,10 +26,11 @@ test.describe('Timer Behavior', () => {
     const timerDisplay = page.locator('[role="timer"]')
     await expect(timerDisplay).toContainText('05:00')
 
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
-    await expect(minutesInput).toHaveValue('5')
-    await expect(secondsInput).toHaveValue('0')
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
+    // GlassNumberStepper displays values with leading zeros
+    await expect(minutesInput).toHaveValue('05')
+    await expect(secondsInput).toHaveValue('00')
 
     // Test persisted state (6 minutes in localStorage)
     await page.evaluate(() => {
@@ -53,8 +54,8 @@ test.describe('Timer Behavior', () => {
     await expect(timerDisplay).toContainText('06:00')
 
     // Wait for inputs to sync with persisted timer state (hydration + useEffect)
-    await expect(minutesInput).toHaveValue('6', { timeout: 2000 })
-    await expect(secondsInput).toHaveValue('0')
+    await expect(minutesInput).toHaveValue('06', { timeout: 2000 })
+    await expect(secondsInput).toHaveValue('00')
 
     // Clean up
     await page.evaluate(() => localStorage.clear())
@@ -66,7 +67,7 @@ test.describe('Timer Behavior', () => {
     await page.goto('/en')
     await page.waitForLoadState('networkidle')
 
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
     const timerDisplay = page.locator('[role="timer"]')
 
     await minutesInput.click()
@@ -98,8 +99,8 @@ test.describe('Timer Behavior', () => {
     await expect(timerDisplay).toContainText('05:00')
 
     // Set timer to 0:0 manually
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.click()
     await minutesInput.fill('0')
@@ -133,8 +134,8 @@ test.describe('Timer Behavior', () => {
     await page.waitForTimeout(1000)
 
     // Set a short timer (2 seconds for faster test)
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.click()
     await minutesInput.fill('0')
@@ -219,8 +220,8 @@ test.describe('Timer Behavior', () => {
     })
 
     // Set a short timer (2 seconds)
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('2')
@@ -249,8 +250,8 @@ test.describe('Timer Behavior', () => {
     await page.waitForTimeout(1000)
 
     // Set a 3 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('3')
@@ -294,8 +295,8 @@ test.describe('Timer Behavior', () => {
     await page.waitForTimeout(1000)
 
     // Set timer to 0:0 first
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('0')

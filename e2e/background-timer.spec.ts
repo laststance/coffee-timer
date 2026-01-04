@@ -22,8 +22,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 5 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('5')
@@ -74,8 +74,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 3 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('3')
@@ -139,8 +139,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 10 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('10')
@@ -191,8 +191,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 5 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('5')
@@ -243,8 +243,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 6 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('6')
@@ -294,8 +294,8 @@ test.describe('Background Timer Functionality', () => {
     await page.waitForTimeout(1000)
 
     // Set a 10 second timer
-    const minutesInput = page.getByRole('spinbutton', { name: /minutes/i })
-    const secondsInput = page.getByRole('spinbutton', { name: /seconds/i })
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
 
     await minutesInput.fill('0')
     await secondsInput.fill('10')
