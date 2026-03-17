@@ -51,10 +51,34 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = (await request.json()) as {
+  let body: {
     durationSeconds: number
     completedAt: string
     soundPreset: string
+  }
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  if (
+    typeof body.durationSeconds !== 'number' ||
+    !Number.isFinite(body.durationSeconds) ||
+    body.durationSeconds <= 0
+  ) {
+    return NextResponse.json(
+      { error: 'Invalid durationSeconds' },
+      { status: 400 },
+    )
+  }
+
+  if (!body.completedAt || isNaN(Date.parse(body.completedAt))) {
+    return NextResponse.json({ error: 'Invalid completedAt' }, { status: 400 })
+  }
+
+  if (typeof body.soundPreset !== 'string' || body.soundPreset.length === 0) {
+    return NextResponse.json({ error: 'Invalid soundPreset' }, { status: 400 })
   }
 
   const newSession = await db

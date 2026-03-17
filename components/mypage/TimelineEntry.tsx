@@ -152,7 +152,7 @@ export const TimelineEntry = memo(function TimelineEntry({
         <button
           onClick={() => setShowMenu(!showMenu)}
           className="rounded-full p-2 min-w-9 min-h-9 flex items-center justify-center text-text-secondary hover:bg-bg-secondary transition-colors focus:outline-none cursor-pointer"
-          aria-label="Actions"
+          aria-label={t('actions')}
         >
           <MoreHorizontal className="h-4 w-4" />
         </button>
@@ -169,7 +169,7 @@ export const TimelineEntry = memo(function TimelineEntry({
             </button>
             <button
               onClick={() => {
-                onDelete(session.id)
+                setShowConfirmDelete(true)
                 setShowMenu(false)
               }}
               className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-bg-secondary cursor-pointer"

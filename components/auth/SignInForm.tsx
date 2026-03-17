@@ -40,6 +40,7 @@ export const SignInForm = memo(function SignInForm() {
         onSuccess: () => {
           router.push('/')
           router.refresh()
+          setIsPending(false)
         },
         onError: (ctx) => {
           setError(ctx.error?.message ?? t('signInError'))

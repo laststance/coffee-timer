@@ -18,7 +18,10 @@ export function useTimerSessions() {
     let cancelled = false
 
     fetch('/api/timer-sessions')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
       .then((data: TimerSessionRecord[]) => {
         if (!cancelled) {
           setSessions(data)

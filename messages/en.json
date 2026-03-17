@@ -93,7 +93,8 @@
     "totalTime": "Total time",
     "breaks": "{count} breaks",
     "break": "1 break",
-    "noBreaksYet": "No breaks yet"
+    "noBreaksYet": "No breaks yet",
+    "actions": "Actions"
   },
   "Notifications": {
     "title": "Notifications",

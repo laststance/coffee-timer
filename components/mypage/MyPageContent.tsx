@@ -12,15 +12,30 @@ import { SummaryStats } from './SummaryStats'
 import { useTimerSessions } from '@/lib/hooks/useTimerSessions'
 
 /**
+ * Convert a date value to local YYYY-MM-DD string.
+ * Ensures consistent local-day bucketing regardless of timezone.
+ *
+ * @param value - Date string (ISO) or Date object
+ * @returns Local date string like "2026-02-16"
+ *
+ * @example
+ * toLocalDateStr('2026-02-16T23:59:00Z') // => "2026-02-17" (in UTC+9)
+ * toLocalDateStr(new Date()) // => "2026-02-16"
+ */
+function toLocalDateStr(value: string | Date): string {
+  const date = new Date(value)
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+/**
  * Get today's date as YYYY-MM-DD string.
  *
- * @returns ISO date string for today
+ * @returns Local date string for today
  * @example
  * getTodayStr() // => "2026-02-16"
  */
 function getTodayStr(): string {
-  const now = new Date()
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+  return toLocalDateStr(new Date())
 }
 
 /**
@@ -33,7 +48,7 @@ function getTodayStr(): string {
  */
 export const MyPageContent = memo(function MyPageContent() {
   const t = useTranslations('MyPage')
-  const tAuth = useTranslations('Auth')
+  const tSettings = useTranslations('Settings')
   const { sessions, isLoading, editSession, deleteSession } = useTimerSessions()
   const [selectedDate, setSelectedDate] = useState(getTodayStr)
   const [currentMonth, setCurrentMonth] = useState(
@@ -58,7 +73,7 @@ export const MyPageContent = memo(function MyPageContent() {
   const sessionCountByDate = useMemo(() => {
     const map = new Map<string, number>()
     for (const s of sessions) {
-      const dateStr = s.completedAt.slice(0, 10) // "YYYY-MM-DD"
+      const dateStr = toLocalDateStr(s.completedAt)
       map.set(dateStr, (map.get(dateStr) ?? 0) + 1)
     }
     return map
@@ -66,7 +81,9 @@ export const MyPageContent = memo(function MyPageContent() {
 
   // Filter sessions for the selected date
   const selectedDateSessions = useMemo(() => {
-    return sessions.filter((s) => s.completedAt.startsWith(selectedDate))
+    return sessions.filter(
+      (s) => toLocalDateStr(s.completedAt) === selectedDate,
+    )
   }, [sessions, selectedDate])
 
   return (
@@ -92,7 +109,7 @@ export const MyPageContent = memo(function MyPageContent() {
             <button
               onClick={() => setIsSettingsOpen(true)}
               className="rounded-full p-3 min-w-11 min-h-11 flex items-center justify-center text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-green cursor-pointer"
-              aria-label={tAuth('myPage')}
+              aria-label={tSettings('openSettings')}
             >
               <Settings className="h-6 w-6" />
             </button>

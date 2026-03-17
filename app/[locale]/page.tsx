@@ -45,6 +45,7 @@ const ShortcutHandler = memo(function ShortcutHandler({
 const Home = memo(function Home() {
   const t = useTranslations('App')
   const tAuth = useTranslations('Auth')
+  const tSettings = useTranslations('Settings')
   const tNotifications = useTranslations('Notifications')
   const { data: session } = authClient.useSession()
   // Use hydration-safe hook to prevent SSR mismatches
@@ -181,7 +182,7 @@ const Home = memo(function Home() {
               <button
                 onClick={() => setIsSettingsOpen(true)}
                 className="rounded-full p-3 min-w-11 min-h-11 flex items-center justify-center text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-green cursor-pointer"
-                aria-label="Open settings"
+                aria-label={tSettings('openSettings')}
               >
                 <Settings className="h-6 w-6" />
               </button>

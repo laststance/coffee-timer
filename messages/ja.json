@@ -93,7 +93,8 @@
     "totalTime": "合計時間",
     "breaks": "{count}回",
     "break": "1回",
-    "noBreaksYet": "まだ記録はありません"
+    "noBreaksYet": "まだ記録はありません",
+    "actions": "アクション"
   },
   "Notifications": {
     "title": "通知",

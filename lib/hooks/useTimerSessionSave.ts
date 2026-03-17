@@ -42,9 +42,14 @@ export function useTimerSessionSave(
           completedAt: new Date().toISOString(),
           soundPreset,
         }),
-      }).catch((error) => {
-        console.error('[TimerSessionSave] Failed to save session:', error)
       })
+        .then((res) => {
+          if (!res.ok)
+            console.error('[TimerSessionSave] Server error:', res.status)
+        })
+        .catch((error) => {
+          console.error('[TimerSessionSave] Failed to save session:', error)
+        })
     }
     previousTimeRef.current = timeRemaining
   }, [timeRemaining, initialTime, soundPreset, userSetTimeRef, session])

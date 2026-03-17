@@ -25,9 +25,11 @@ export async function PATCH(
   }
 
   const { id } = await params
-  const body = (await request.json()) as {
-    note?: string
-    durationSeconds?: number
+  let body: { note?: string; durationSeconds?: number }
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
   const updated = await db
