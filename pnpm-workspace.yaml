@@ -9,6 +9,7 @@ onlyBuiltDependencies:
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
   - next
+  - '@next/*'
   - react
   - react-dom
   - '@types/react'

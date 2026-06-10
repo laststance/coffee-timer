@@ -19,6 +19,7 @@ const config = [
       '@laststance/react-next': lastStanceReactNextPlugin,
     },
     rules: {
+      // Keep this list aligned with the published plugin rules so CI can boot lint reliably.
       '@laststance/react-next/no-jsx-without-return': 'error',
       '@laststance/react-next/all-memo': 'error',
       '@laststance/react-next/no-use-reducer': 'error',
@@ -27,7 +28,6 @@ const config = [
       '@laststance/react-next/no-deopt-use-memo': 'error',
       '@laststance/react-next/no-direct-use-effect': 'error',
       '@laststance/react-next/prefer-stable-context-value': 'error',
-      '@laststance/react-next/no-unstable-classname-prop': 'error',
       '@laststance/react-next/prefer-usecallback-might-work': 'error',
       '@laststance/react-next/prefer-usecallback-for-memoized-component':
         'error',
