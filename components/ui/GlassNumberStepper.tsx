@@ -1,9 +1,29 @@
 'use client'
 
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { Minus, Plus } from 'lucide-react'
+import {
+  STEPPER_HOLD_REPEAT_DELAY_MS,
+  STEPPER_HOLD_REPEAT_INTERVAL_MS,
+} from '@/components/ui/constants'
+
+type StepperHoldAction = 'increment' | 'decrement'
+
+interface HoldToRepeatCallbacks {
+  onIncrement: () => void
+  onDecrement: () => void
+}
+
+interface StopHoldAtBoundaryOptions {
+  disabled: boolean
+  isHolding: StepperHoldAction | null
+  max: number
+  min: number
+  stopHold: () => void
+  value: number
+}
 
 /**
  * Props for GlassNumberStepper component.
@@ -29,31 +49,31 @@ interface GlassNumberStepperProps {
 }
 
 /**
- * Custom hook for hold-to-repeat behavior.
- * Waits 300ms, then repeats every 100ms.
- * Automatically cleans up timers on unmount.
+ * Runs the latest +/- callback while a stepper button is held by GlassNumberStepper.
+ * @param callbacks - Latest increment and decrement handlers from the rendered stepper.
+ * @returns Hold state plus start/stop handlers for pointer, blur, and boundary cleanup.
+ * @example
+ * const hold = useHoldToRepeat({ onIncrement: addOne, onDecrement: subtractOne })
  */
-function useHoldToRepeat() {
-  const [isHolding, setIsHolding] = useState<'increment' | 'decrement' | null>(
-    null,
-  )
-  const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const holdIntervalRef = useRef<NodeJS.Timeout | null>(null)
+function useHoldToRepeat({ onIncrement, onDecrement }: HoldToRepeatCallbacks) {
+  const [isHolding, setIsHolding] = useState<StepperHoldAction | null>(null)
+  const incrementCallbackRef = useRef(onIncrement)
+  const decrementCallbackRef = useRef(onDecrement)
+  const holdTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const holdIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const startHold = (
-    action: 'increment' | 'decrement',
-    callback: () => void,
-  ) => {
-    setIsHolding(action)
-    callback()
+  useEffect(() => {
+    incrementCallbackRef.current = onIncrement
+    decrementCallbackRef.current = onDecrement
+  }, [onDecrement, onIncrement])
 
-    holdTimeoutRef.current = setTimeout(() => {
-      holdIntervalRef.current = setInterval(callback, 100)
-    }, 300)
-  }
-
-  const stopHold = () => {
-    setIsHolding(null)
+  /**
+   * Clears queued repeat timers when a hold ends, unmounts, or hits a limit.
+   * @returns Nothing; it only clears browser timer handles stored in refs.
+   * @example
+   * clearHoldTimers()
+   */
+  const clearHoldTimers = () => {
     if (holdTimeoutRef.current) {
       clearTimeout(holdTimeoutRef.current)
       holdTimeoutRef.current = null
@@ -64,15 +84,91 @@ function useHoldToRepeat() {
     }
   }
 
+  /**
+   * Invokes the current action callback so repeat ticks use the newest prop value.
+   * @param action - Which side of the stepper is being held.
+   * @returns Nothing; the callback owns whether the value actually changes.
+   * @example
+   * runHoldAction('increment')
+   */
+  const runHoldAction = (action: StepperHoldAction) => {
+    if (action === 'increment') {
+      incrementCallbackRef.current()
+      return
+    }
+
+    decrementCallbackRef.current()
+  }
+
+  /**
+   * Starts a hold from pointer down with one immediate change, then repeats after a delay.
+   * @param action - Which side of the stepper started the hold.
+   * @returns Nothing; timers are stored for stopHold and unmount cleanup.
+   * @example
+   * startHold('decrement')
+   */
+  const startHold = (action: StepperHoldAction) => {
+    clearHoldTimers()
+
+    setIsHolding(action)
+    runHoldAction(action)
+
+    holdTimeoutRef.current = setTimeout(() => {
+      holdIntervalRef.current = setInterval(
+        () => runHoldAction(action),
+        STEPPER_HOLD_REPEAT_INTERVAL_MS,
+      )
+    }, STEPPER_HOLD_REPEAT_DELAY_MS)
+  }
+
+  /**
+   * Stops a hold when the user releases, leaves, cancels, blurs, or hits a limit.
+   * @returns Nothing; it resets visual hold state and clears repeat timers.
+   * @example
+   * stopHold()
+   */
+  const stopHold = () => {
+    setIsHolding(null)
+    clearHoldTimers()
+  }
+
   // Cleanup timers on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
-      if (holdTimeoutRef.current) clearTimeout(holdTimeoutRef.current)
-      if (holdIntervalRef.current) clearInterval(holdIntervalRef.current)
+      clearHoldTimers()
     }
   }, [])
 
   return { isHolding, startHold, stopHold }
+}
+
+/**
+ * Stops an active hold when the next repeat would be blocked by disabled state or bounds.
+ * @param options - Current value, range, disabled state, hold action, and stop callback.
+ * @returns Nothing; it only stops active hold timers after render.
+ * @example
+ * useStopHoldAtBoundary({ disabled: false, isHolding: 'increment', max: 59, min: 0, stopHold, value: 59 })
+ */
+function useStopHoldAtBoundary({
+  disabled,
+  isHolding,
+  max,
+  min,
+  stopHold,
+  value,
+}: StopHoldAtBoundaryOptions) {
+  useEffect(() => {
+    if (!isHolding) return
+
+    // Stop once limits disable the pressed button; disabled buttons may not fire pointerup.
+    if (
+      disabled ||
+      (isHolding === 'increment' && value >= max) ||
+      (isHolding === 'decrement' && value <= min)
+    ) {
+      stopHold()
+    }
+  }, [disabled, isHolding, max, min, stopHold, value])
 }
 
 /**
@@ -109,30 +205,54 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
 }: GlassNumberStepperProps) {
   const { resolvedTheme } = useTheme()
   const isLiquidGlass = resolvedTheme?.startsWith('liquid-glass') ?? false
-  const { startHold, stopHold } = useHoldToRepeat()
 
   /**
    * Clamp value within min/max bounds.
-   * @param v - Value to clamp
-   * @returns Clamped value
+   * @param candidateValue - Value requested by input, keyboard, or stepper button.
+   * @returns The candidate value forced into the component's allowed range.
+   * @example
+   * clamp(61) // => max when max is lower than 61
    */
-  const clamp = (v: number): number => Math.max(min, Math.min(max, v))
+  const clamp = useCallback(
+    (candidateValue: number): number =>
+      Math.max(min, Math.min(max, candidateValue)),
+    [max, min],
+  )
 
-  const increment = () => {
+  /**
+   * Increases the value by one step when the plus button, arrow key, or hold repeat fires.
+   * @returns Nothing; emits onChange only when the clamped value differs.
+   * @example
+   * increment()
+   */
+  const increment = useCallback(() => {
     if (disabled) return
     const newValue = clamp(value + step)
     if (newValue !== value) {
       onChange(newValue)
     }
-  }
+  }, [clamp, disabled, onChange, step, value])
 
-  const decrement = () => {
+  /**
+   * Decreases the value by one step when the minus button, arrow key, or hold repeat fires.
+   * @returns Nothing; emits onChange only when the clamped value differs.
+   * @example
+   * decrement()
+   */
+  const decrement = useCallback(() => {
     if (disabled) return
     const newValue = clamp(value - step)
     if (newValue !== value) {
       onChange(newValue)
     }
-  }
+  }, [clamp, disabled, onChange, step, value])
+
+  const { isHolding, startHold, stopHold } = useHoldToRepeat({
+    onDecrement: decrement,
+    onIncrement: increment,
+  })
+
+  useStopHoldAtBoundary({ disabled, isHolding, max, min, stopHold, value })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
@@ -173,9 +293,11 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           {/* Decrement Button */}
           <motion.button
             type="button"
-            onPointerDown={() => startHold('decrement', decrement)}
+            onPointerDown={() => startHold('decrement')}
             onPointerUp={stopHold}
             onPointerLeave={stopHold}
+            onPointerCancel={stopHold}
+            onBlur={stopHold}
             disabled={disabled || value <= min}
             aria-label={`Decrease ${label || 'value'}`}
             className={`
@@ -223,9 +345,11 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           {/* Increment Button */}
           <motion.button
             type="button"
-            onPointerDown={() => startHold('increment', increment)}
+            onPointerDown={() => startHold('increment')}
             onPointerUp={stopHold}
             onPointerLeave={stopHold}
+            onPointerCancel={stopHold}
+            onBlur={stopHold}
             disabled={disabled || value >= max}
             aria-label={`Increase ${label || 'value'}`}
             className={`
@@ -261,9 +385,11 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
         {/* Decrement Button */}
         <button
           type="button"
-          onPointerDown={() => startHold('decrement', decrement)}
+          onPointerDown={() => startHold('decrement')}
           onPointerUp={stopHold}
           onPointerLeave={stopHold}
+          onPointerCancel={stopHold}
+          onBlur={stopHold}
           disabled={disabled || value <= min}
           aria-label={`Decrease ${label || 'value'}`}
           className={`
@@ -309,9 +435,11 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
         {/* Increment Button */}
         <button
           type="button"
-          onPointerDown={() => startHold('increment', increment)}
+          onPointerDown={() => startHold('increment')}
           onPointerUp={stopHold}
           onPointerLeave={stopHold}
+          onPointerCancel={stopHold}
+          onBlur={stopHold}
           disabled={disabled || value >= max}
           aria-label={`Increase ${label || 'value'}`}
           className={`

@@ -66,6 +66,59 @@ test.describe('GlassNumberStepper', () => {
     await expect(minutesInput).toHaveValue('03')
   })
 
+  test('holding minutes + button keeps incrementing until released', async ({
+    page,
+  }) => {
+    // Arrange
+    await page.clock.install()
+    const minutesInput = page.getByTestId('time-input-minutes')
+    await expect(minutesInput).toHaveValue('05')
+
+    const minutesStepper = minutesInput.locator('..')
+    const incrementButton = minutesStepper.getByRole('button', {
+      name: /increase/i,
+    })
+
+    // Act
+    await incrementButton.hover()
+    await page.mouse.down()
+    await expect(minutesInput).toHaveValue('06')
+    await page.clock.runFor(600)
+    await page.mouse.up()
+
+    // Assert
+    await expect(minutesInput).toHaveValue('09')
+    await page.clock.runFor(300)
+    await expect(minutesInput).toHaveValue('09')
+  })
+
+  test('holding seconds - button keeps decrementing until released', async ({
+    page,
+  }) => {
+    // Arrange
+    await page.clock.install()
+    const secondsInput = page.getByTestId('time-input-seconds')
+    await secondsInput.fill('05')
+    await expect(secondsInput).toHaveValue('05')
+
+    const secondsStepper = secondsInput.locator('..')
+    const decrementButton = secondsStepper.getByRole('button', {
+      name: /decrease/i,
+    })
+
+    // Act
+    await decrementButton.hover()
+    await page.mouse.down()
+    await expect(secondsInput).toHaveValue('04')
+    await page.clock.runFor(600)
+    await page.mouse.up()
+
+    // Assert
+    await expect(secondsInput).toHaveValue('01')
+    await page.clock.runFor(300)
+    await expect(secondsInput).toHaveValue('01')
+  })
+
   test('seconds stepper respects min boundary (0)', async ({ page }) => {
     // Get the seconds input (default is 0)
     const secondsInput = page.getByTestId('time-input-seconds')
