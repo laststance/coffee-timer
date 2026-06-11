@@ -92,14 +92,14 @@ test.describe('GlassNumberStepper', () => {
     await expect(minutesInput).toHaveValue('09')
   })
 
-  test('holding seconds - button keeps decrementing until released', async ({
+  test('holding seconds - button stops at lower boundary before release', async ({
     page,
   }) => {
     // Arrange
     await page.clock.install()
     const secondsInput = page.getByTestId('time-input-seconds')
-    await secondsInput.fill('05')
-    await expect(secondsInput).toHaveValue('05')
+    await secondsInput.fill('02')
+    await expect(secondsInput).toHaveValue('02')
 
     const secondsStepper = secondsInput.locator('..')
     const decrementButton = secondsStepper.getByRole('button', {
@@ -109,14 +109,16 @@ test.describe('GlassNumberStepper', () => {
     // Act
     await decrementButton.hover()
     await page.mouse.down()
-    await expect(secondsInput).toHaveValue('04')
-    await page.clock.runFor(600)
-    await page.mouse.up()
+    await expect(secondsInput).toHaveValue('01')
+    await page.clock.runFor(1200)
 
     // Assert
-    await expect(secondsInput).toHaveValue('01')
+    await expect(secondsInput).toHaveValue('00')
     await page.clock.runFor(300)
-    await expect(secondsInput).toHaveValue('01')
+    await expect(secondsInput).toHaveValue('00')
+    await page.mouse.up()
+    await page.clock.runFor(300)
+    await expect(secondsInput).toHaveValue('00')
   })
 
   test('seconds stepper respects min boundary (0)', async ({ page }) => {

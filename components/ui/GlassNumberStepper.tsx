@@ -254,6 +254,34 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
 
   useStopHoldAtBoundary({ disabled, isHolding, max, min, stopHold, value })
 
+  /**
+   * Starts decrement hold only for primary pointer presses so alternate clicks never mutate value.
+   * @param event - Pointer down event from the minus button.
+   * @returns Nothing; non-primary pointers are ignored before hold timers start.
+   * @example
+   * handleDecrementPointerDown(primaryPointerEvent)
+   */
+  const handleDecrementPointerDown = (
+    event: React.PointerEvent<HTMLButtonElement>,
+  ) => {
+    if (!event.isPrimary || event.button !== 0) return
+    startHold('decrement')
+  }
+
+  /**
+   * Starts increment hold only for primary pointer presses so alternate clicks never mutate value.
+   * @param event - Pointer down event from the plus button.
+   * @returns Nothing; non-primary pointers are ignored before hold timers start.
+   * @example
+   * handleIncrementPointerDown(primaryPointerEvent)
+   */
+  const handleIncrementPointerDown = (
+    event: React.PointerEvent<HTMLButtonElement>,
+  ) => {
+    if (!event.isPrimary || event.button !== 0) return
+    startHold('increment')
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
     if (inputValue === '') {
@@ -293,7 +321,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           {/* Decrement Button */}
           <motion.button
             type="button"
-            onPointerDown={() => startHold('decrement')}
+            onPointerDown={handleDecrementPointerDown}
             onPointerUp={stopHold}
             onPointerLeave={stopHold}
             onPointerCancel={stopHold}
@@ -345,7 +373,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
           {/* Increment Button */}
           <motion.button
             type="button"
-            onPointerDown={() => startHold('increment')}
+            onPointerDown={handleIncrementPointerDown}
             onPointerUp={stopHold}
             onPointerLeave={stopHold}
             onPointerCancel={stopHold}
@@ -385,7 +413,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
         {/* Decrement Button */}
         <button
           type="button"
-          onPointerDown={() => startHold('decrement')}
+          onPointerDown={handleDecrementPointerDown}
           onPointerUp={stopHold}
           onPointerLeave={stopHold}
           onPointerCancel={stopHold}
@@ -435,7 +463,7 @@ export const GlassNumberStepper = memo(function GlassNumberStepper({
         {/* Increment Button */}
         <button
           type="button"
-          onPointerDown={() => startHold('increment')}
+          onPointerDown={handleIncrementPointerDown}
           onPointerUp={stopHold}
           onPointerLeave={stopHold}
           onPointerCancel={stopHold}
