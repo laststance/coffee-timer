@@ -183,6 +183,45 @@ test.describe('Timer Behavior', () => {
     await expect(page.getByRole('button', { name: /start/i })).toBeVisible()
   })
 
+  test('completed timer restarts from typed duration without touching stepper buttons', async ({
+    page,
+  }) => {
+    // Arrange
+    await page.goto('/en')
+    await page.waitForLoadState('domcontentloaded')
+
+    await page.waitForTimeout(1000)
+
+    const minutesInput = page.getByTestId('time-input-minutes')
+    const secondsInput = page.getByTestId('time-input-seconds')
+    const timerDisplay = page.locator('[role="timer"]')
+    const startButton = page.getByRole('button', { name: /start/i })
+
+    await minutesInput.fill('0')
+    await secondsInput.fill('2')
+    await expect(timerDisplay).toContainText('00:02')
+    await expect(startButton).toBeEnabled()
+
+    await startButton.click()
+    await expect(page.getByRole('button', { name: /pause/i })).toBeVisible({
+      timeout: 1000,
+    })
+    await expect(timerDisplay).toContainText('00:00', { timeout: 5000 })
+    await expect(startButton).toBeVisible()
+    await expect(minutesInput).toHaveValue('00')
+    await expect(secondsInput).toHaveValue('02')
+
+    // Act
+    await expect(startButton).toBeEnabled()
+    await startButton.click()
+
+    // Assert
+    await expect(page.getByRole('button', { name: /pause/i })).toBeVisible({
+      timeout: 1000,
+    })
+    await expect(timerDisplay).toContainText(/00:0[12]/)
+  })
+
   test.skip('timer completion respects "None" sound preset', async ({
     page,
   }) => {

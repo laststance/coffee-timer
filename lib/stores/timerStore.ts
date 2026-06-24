@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { MAX_TIMER_TOTAL_SECONDS } from '@/lib/constants/time'
+import {
+  DEFAULT_TIMER_SECONDS,
+  MAX_TIMER_TOTAL_SECONDS,
+  MILLISECONDS_PER_SECOND,
+} from '@/lib/constants/time'
 
 interface TimerState {
   // State
@@ -20,12 +24,34 @@ interface TimerState {
   updateTimeRemaining: () => void // recalculate time based on timestamp
 }
 
+/**
+ * Chooses the countdown length when Start is pressed so completed timers restart from the displayed duration.
+ * @param timeRemaining - Current countdown seconds left on the timer.
+ * @param initialTime - Duration seconds selected in the time input.
+ * @returns
+ * - Remaining seconds while idle or paused
+ * - Initial duration seconds after the timer has completed
+ * - 0 when no startable duration exists
+ * @example
+ * getStartDurationSeconds(0, 120) // => 120
+ */
+const getStartDurationSeconds = (
+  timeRemaining: number,
+  initialTime: number,
+): number => {
+  if (timeRemaining > 0) {
+    return timeRemaining
+  }
+
+  return initialTime
+}
+
 export const useTimerStore = create<TimerState>()(
   persist(
     (set, get) => ({
       // Initial state
-      timeRemaining: 300, // 5 minutes default
-      initialTime: 300,
+      timeRemaining: DEFAULT_TIMER_SECONDS,
+      initialTime: DEFAULT_TIMER_SECONDS,
       isRunning: false,
       isPaused: false,
       targetEndTime: null,
@@ -48,12 +74,30 @@ export const useTimerStore = create<TimerState>()(
       },
 
       start: () => {
-        const { timeRemaining } = get()
+        const { initialTime, timeRemaining } = get()
         const now = Date.now()
+        const startDurationSeconds = getStartDurationSeconds(
+          timeRemaining,
+          initialTime,
+        )
+
+        if (startDurationSeconds <= 0) {
+          set({
+            timeRemaining: 0,
+            isRunning: false,
+            isPaused: false,
+            targetEndTime: null,
+            lastUpdateTime: now,
+          })
+          return
+        }
+
+        // A completed timer has 0 remaining but still has a selected duration.
         set({
+          timeRemaining: startDurationSeconds,
           isRunning: true,
           isPaused: false,
-          targetEndTime: now + timeRemaining * 1000,
+          targetEndTime: now + startDurationSeconds * MILLISECONDS_PER_SECOND,
           lastUpdateTime: now,
         })
       },
@@ -66,7 +110,10 @@ export const useTimerStore = create<TimerState>()(
         let currentRemaining = 0
         if (targetEndTime) {
           const remainingMs = targetEndTime - now
-          currentRemaining = Math.max(0, Math.ceil(remainingMs / 1000))
+          currentRemaining = Math.max(
+            0,
+            Math.ceil(remainingMs / MILLISECONDS_PER_SECOND),
+          )
         }
 
         set({
@@ -106,7 +153,9 @@ export const useTimerStore = create<TimerState>()(
           })
         } else {
           // Update remaining time based on actual elapsed time
-          const remainingSeconds = Math.ceil(remainingMs / 1000)
+          const remainingSeconds = Math.ceil(
+            remainingMs / MILLISECONDS_PER_SECOND,
+          )
           set({
             timeRemaining: remainingSeconds,
             lastUpdateTime: now,
@@ -131,7 +180,9 @@ export const useTimerStore = create<TimerState>()(
           })
         } else {
           // Recalculate remaining time
-          const remainingSeconds = Math.ceil(remainingMs / 1000)
+          const remainingSeconds = Math.ceil(
+            remainingMs / MILLISECONDS_PER_SECOND,
+          )
           set({
             timeRemaining: remainingSeconds,
             lastUpdateTime: now,
