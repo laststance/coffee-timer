@@ -1,0 +1,54 @@
+# Meticulous visual regression tests — https://app.meticulous.ai/docs/github-actions-v2
+# Required secret: METICULOUS_API_TOKEN (Meticulous Dashboard → Project Settings)
+name: Meticulous Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js app
+        run: pnpm build
+        env:
+          NODE_ENV: production
+          METICULOUS_BUILD: 'true'
+
+      - name: Start app
+        run: |
+          pnpm start &
+          npx wait-on http://localhost:3009/en --timeout 60000
+
+      - name: Run Meticulous tests
+        uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
+        with:
+          api-token: ${{ secrets.METICULOUS_API_TOKEN }}
+          app-url: 'http://localhost:3009'
