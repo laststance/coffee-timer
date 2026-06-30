@@ -1,4 +1,4 @@
-# Meticulous visual regression tests — https://app.meticulous.ai/docs/frameworks/nextjs/app-router
+# Meticulous visual regression tests — https://app.meticulous.ai/docs/github-actions-v2
 # Required secret: METICULOUS_API_TOKEN (Meticulous Dashboard → Project Settings)
 name: Meticulous Tests
 
@@ -22,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -38,11 +40,7 @@ jobs:
         run: pnpm build
         env:
           NODE_ENV: production
-
-      - name: Prepare companion assets
-        run: |
-          mkdir -p companion-assets/_next
-          cp -r .next/static companion-assets/_next/
+          METICULOUS_BUILD: 'true'
 
       - name: Start app
         run: |
@@ -54,5 +52,3 @@ jobs:
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
           app-url: 'http://localhost:3009'
-          companion-assets-folder: 'companion-assets'
-          companion-assets-regex: '^/_next/static/'
