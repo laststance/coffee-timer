@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { Analytics } from '@vercel/analytics/next'
 import { routing } from '@/i18n/routing'
 import { LayoutBody } from '@/components/LayoutBody'
+import { METICULOUS_RECORDER_SCRIPT_URL } from '@/lib/constants/meticulous'
+import { getMeticulousProjectId } from '@/lib/utils/getMeticulousProjectId'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -134,9 +136,20 @@ export default async function LocaleLayout({
   // side is the easiest way to get started
   const messages = await getMessages()
   const timeZone = await getTimeZone()
+  const meticulousProjectId = getMeticulousProjectId()
 
   return (
     <html lang={resolvedLocale} suppressHydrationWarning>
+      <head>
+        {meticulousProjectId ? (
+          // Meticulous requires a synchronous native script before other scripts load.
+          // eslint-disable-next-line @next/next/no-sync-scripts -- required by Meticulous recorder
+          <script
+            data-project-id={meticulousProjectId}
+            src={METICULOUS_RECORDER_SCRIPT_URL}
+          />
+        ) : null}
+      </head>
       <body className="bg-bg-primary text-text-primary antialiased ambient-bg min-h-screen">
         <LayoutBody
           messages={messages}
