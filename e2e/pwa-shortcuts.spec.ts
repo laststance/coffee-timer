@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('PWA shortcuts', () => {
-  test('settings shortcut opens the English settings dialog', async ({
+  test('settings shortcut route opens the English settings dialog', async ({
     page,
   }) => {
     // Arrange and Act
-    await page.goto('/?action=settings')
+    await page.goto('/shortcuts/settings')
 
     // Assert
     await expect(page).toHaveURL('http://localhost:3009/en')
@@ -14,11 +14,11 @@ test.describe('PWA shortcuts', () => {
     await expect(page.getByTestId('settings-panel')).toBeHidden()
   })
 
-  test('start shortcut starts and resets the default five-minute timer', async ({
+  test('start shortcut route starts and resets the default five-minute timer', async ({
     page,
   }) => {
     // Arrange and Act
-    await page.goto('/?action=start')
+    await page.goto('/shortcuts/start')
 
     // Assert
     await expect(page).toHaveURL('http://localhost:3009/en')
