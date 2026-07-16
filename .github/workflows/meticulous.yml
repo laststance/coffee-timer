@@ -17,6 +17,10 @@ permissions:
 
 jobs:
   test:
+    if: >-
+      github.event_name != 'pull_request' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]')
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -42,6 +46,12 @@ jobs:
           NODE_ENV: production
           METICULOUS_BUILD: 'true'
 
+      # Serve immutable Next.js chunks directly to make visual replays faster and steadier.
+      - name: Prepare companion assets
+        run: |
+          mkdir -p companion-assets/_next
+          cp -r .next/static companion-assets/_next/
+
       - name: Start app
         run: |
           pnpm start &
@@ -52,3 +62,5 @@ jobs:
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
           app-url: 'http://localhost:3009'
+          companion-assets-folder: 'companion-assets'
+          companion-assets-regex: '^/_next/static/'

@@ -86,20 +86,9 @@ const Home = memo(function Home() {
   )
   useTimerSessionSave(timeRemaining, initialTime, soundPreset, userSetTimeRef)
 
-  // Start timer from PWA shortcut (separate function to handle async)
-  const handleStartFromShortcut = useCallback(async () => {
-    try {
-      await audioManager.initialize()
-      const currentPreset = useSettingsStore.getState().soundPreset
-      if (currentPreset !== 'none') {
-        await audioManager.preload(currentPreset)
-      }
-      useTimerStore.getState().start()
-    } catch (error) {
-      console.error('[Shortcut] Failed to start timer:', error)
-      // Still try to start timer even if audio fails
-      useTimerStore.getState().start()
-    }
+  /** Starts a PWA shortcut timer synchronously because ShortcutHandler has no gesture to unlock Web Audio. @returns Nothing; the timer store is updated immediately. @example handleStartFromShortcut() */
+  const handleStartFromShortcut = useCallback(() => {
+    useTimerStore.getState().start()
   }, [])
 
   // Open settings callback for PWA shortcut (memoized for ShortcutHandler)
