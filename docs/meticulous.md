@@ -8,7 +8,7 @@ This note records the current Meticulous behavior and the recommended setup for 
 - The recorder should be a synchronous native `<script>` in the initial server-rendered `<head>`, before application scripts. Do not use `async`, `defer`, or Next.js `Script`. This is necessary to wrap `fetch` and `XMLHttpRequest` before application code captures their native references. [Recorder installation](https://app.meticulous.ai/docs/recorder-installation) · [Capturing early requests](https://app.meticulous.ai/docs/how-to/ensure-recorder-captures-all-requests)
 - Localhost is a supported and explicitly recommended recording environment. The normal recorder, the Meticulous CLI, and existing Playwright tests can all generate sessions. [Onboarding](https://app.meticulous.ai/docs/onboarding-guide) · [Ingest existing tests](https://app.meticulous.ai/docs/session-recording/ingest-existing-tests)
 - The official current recommendation for a server-rendered Next.js application is `upload-container@v1`. `cloud-compute@v1` is a tunnel-based fallback when a container is not practical. The `github-actions-v2` URL is the name of the setup guide; the current action major version is still `@v1`. [Next.js App Router guide](https://app.meticulous.ai/docs/frameworks/nextjs/app-router) · [Official action repository](https://github.com/alwaysmeticulous/report-diffs-action)
-- Coffee Timer currently has no Dockerfile, so its existing `cloud-compute@v1` approach is a reasonable incremental path. If it stays on `cloud-compute`, the official Next.js configuration includes companion assets for `/_next/static/`.
+- Coffee Timer currently has no Dockerfile, so its existing `cloud-compute@v1` approach is a reasonable incremental path. The official Next.js configuration documents companion assets for `/_next/static/`, but the current Meticulous API rejects that documented regex; Coffee Timer therefore uses the supported tunnel-only configuration until the upstream incompatibility is fixed.
 
 ## How recording becomes a CI test
 
@@ -140,7 +140,7 @@ Coffee Timer skips the Meticulous job for fork pull requests and Dependabot pull
 
 ## Correct `cloud-compute` workflow for this repository
 
-Official guidance now prefers `upload-container@v1` for Next.js. If Coffee Timer continues with its current tunnel approach, the documented Next.js version is:
+Official guidance now prefers `upload-container@v1` for Next.js. Coffee Timer currently uses this tunnel-only workflow:
 
 ```yaml
 name: Meticulous Tests
@@ -187,11 +187,6 @@ jobs:
           NODE_ENV: production
           METICULOUS_BUILD: 'true'
 
-      - name: Prepare companion assets
-        run: |
-          mkdir -p companion-assets/_next
-          cp -r .next/static companion-assets/_next/
-
       - name: Start app
         run: |
           pnpm start &
@@ -202,13 +197,11 @@ jobs:
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
           app-url: 'http://localhost:3009'
-          companion-assets-folder: 'companion-assets'
-          companion-assets-regex: '^/_next/static/'
 ```
 
 The action's `github-token` input defaults to `${{ github.token }}`. `api-token` and `app-url` are the required single-project inputs; the other tunnel inputs are optional. [Official cloud-compute action definition](https://github.com/alwaysmeticulous/report-diffs-action/blob/main/cloud-compute/action.yml)
 
-The repository's `.github/workflows/meticulous.yml` has the essential triggers, permissions, secret, production build, live server, `cloud-compute@v1`, and the official Next.js companion-assets setup for `/_next/static/`. If companion assets fail in this app, `cloud-compute` can run without them because those inputs are optional, but omitting them diverges from the current Next.js recommendation and can make static asset delivery slower.
+The repository's `.github/workflows/meticulous.yml` has the essential triggers, permissions, secret, production build, live server, and `cloud-compute@v1`. The optional companion-assets inputs are intentionally disabled: on 2026-07-16, the live API returned HTTP 400 for the officially documented `^/_next/static/` regex before any replay began. The tunnel serves those static assets without the optimization, which preserves correctness while avoiding the incompatible request. Re-enable companion assets after Meticulous accepts its documented configuration. [Companion assets guide](https://app.meticulous.ai/docs/how-to/companion-assets-advanced)
 
 ## Branch and first-run behavior
 
