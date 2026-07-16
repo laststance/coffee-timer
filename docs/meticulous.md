@@ -9,6 +9,7 @@ This note records the current Meticulous behavior and the recommended setup for 
 - Localhost is a supported and explicitly recommended recording environment. The normal recorder, the Meticulous CLI, and existing Playwright tests can all generate sessions. [Onboarding](https://app.meticulous.ai/docs/onboarding-guide) · [Ingest existing tests](https://app.meticulous.ai/docs/session-recording/ingest-existing-tests)
 - The official current recommendation for a server-rendered Next.js application is `upload-container@v1`. `cloud-compute@v1` is a tunnel-based fallback when a container is not practical. The `github-actions-v2` URL is the name of the setup guide; the current action major version is still `@v1`. [Next.js App Router guide](https://app.meticulous.ai/docs/frameworks/nextjs/app-router) · [Official action repository](https://github.com/alwaysmeticulous/report-diffs-action)
 - Coffee Timer currently has no Dockerfile, so its existing `cloud-compute@v1` approach is a reasonable incremental path. The official Next.js configuration documents companion assets for `/_next/static/`, but the current Meticulous API rejects that documented regex; Coffee Timer therefore uses the supported tunnel-only configuration until the upstream incompatibility is fixed.
+- Source coverage requires browser source maps. Coffee Timer enables Next.js production browser source maps only when `METICULOUS_BUILD=true`, which the Meticulous workflow already sets, so normal production builds do not publish application source maps. [Source coverage](https://app.meticulous.ai/docs/how-to/enable-source-coverage) · [Next.js production browser source maps](https://nextjs.org/docs/app/api-reference/config/next-config-js/productionBrowserSourceMaps)
 
 ## How recording becomes a CI test
 
@@ -22,6 +23,23 @@ The lifecycle is:
 4. To guarantee a critical flow is always included, open that session in the Dashboard and click **Add to selected sessions**. [Session selection](https://app.meticulous.ai/docs/how-to/testing-pool)
 
 Therefore, “the Dashboard shows recordings” and “CI runs those recordings” are related but separate checks. Validate both the **All Sessions** tab and the **Selected Sessions** tab.
+
+## Source coverage
+
+Meticulous calculates source coverage from the JavaScript executed during replay. It can map generated browser bundles back to repository files when the tested app serves source maps with the same filename plus `.map`, points to them through a `sourceMappingURL`, or uses a `SourceMap` response header. [Source coverage](https://app.meticulous.ai/docs/how-to/enable-source-coverage)
+
+`next.config.ts` sets `productionBrowserSourceMaps` only when `METICULOUS_BUILD=true`; Next.js then writes browser `.js.map` files, adds `sourceMappingURL` references to the JavaScript bundles, and serves the maps through `next start`. The Meticulous workflow sets this build flag for both main and pull-request replay builds. Local development, ordinary production builds, and deployed builds remain unchanged unless the flag is explicitly enabled.
+
+Verify the build output and HTTP behavior with:
+
+```bash
+METICULOUS_BUILD=true pnpm build
+rg --files .next/static -g '*.js.map'
+kill-port 3009
+pnpm start
+```
+
+Open `http://localhost:3009/en`, inspect a loaded `/_next/static/chunks/*.js` response, find its final `sourceMappingURL` comment, and request that map URL from the same chunks directory. Both requests should return HTTP `200`. After the Meticulous workflow completes, open the project **Overview**, select **View coverage & snapshots**, and use the **Sources** tab to inspect file and line coverage.
 
 ## Recorder installation and localhost verification
 
@@ -220,5 +238,6 @@ The repository's `.github/workflows/meticulous.yml` has the essential triggers, 
 - GitHub App is installed and `METICULOUS_API_TOKEN` is configured for the same project.
 - Workflow succeeds on main and creates a base test run.
 - A subsequent PR produces a head-vs-base Meticulous test run.
+- Meticulous builds emit and serve browser `.js.map` files, and the Dashboard **Sources** tab shows repository file coverage.
 - Next.js project settings pass through RSC/static asset requests.
 - Fork/Dependabot pull requests safely skip the job when the API secret is unavailable.
