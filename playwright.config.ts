@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './e2e',
+  // Meticulous ingestion is an explicit local task because it creates remote sessions.
+  testIgnore: '**/meticulous/**',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

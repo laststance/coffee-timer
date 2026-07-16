@@ -1,0 +1,7 @@
+export const METICULOUS_RECORDER_QUERY = 'meticulousForceRecording=true'
+export const METICULOUS_RECORDER_READY_TIMEOUT_MS = 30_000
+export const METICULOUS_RECORDING_RETRIES = 0
+export const METICULOUS_RECORDING_WORKERS = 1
+export const METICULOUS_WEB_SERVER_TIMEOUT_MS = 120_000
+export const TIMER_COMPLETION_TIMEOUT_MS = 5_000
+export const MOBILE_VIEWPORT = { width: 375, height: 812 }
