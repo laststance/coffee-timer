@@ -1,5 +1,7 @@
 import nextConfig from 'eslint-config-next'
 import lastStanceReactNextPlugin from '@laststance/react-next-eslint-plugin'
+import { fixupConfigRules } from '@eslint/compat'
+import * as espree from 'espree'
 
 const config = [
   {
@@ -35,7 +37,16 @@ const config = [
       '@laststance/react-next/prefer-usememo-might-work': 'error',
     },
   },
-  ...nextConfig,
+  // Bridge legacy plugin context APIs until Next.js plugins support ESLint 10.
+  ...fixupConfigRules(nextConfig),
+  {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    languageOptions: {
+      // Use ESLint's standard parser until Next.js's Babel parser supports ESLint 10.
+      parser: espree,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
 ]
 
 export default config

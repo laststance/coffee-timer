@@ -15,11 +15,12 @@ import { test, expect } from '@playwright/test'
 test.describe('GlassNumberStepper', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/en')
-    await page.waitForLoadState('networkidle')
+    // The stepper is ready independently of background recording requests.
+    await expect(page.getByTestId('time-input-seconds')).toBeVisible()
     // Clear localStorage to ensure consistent initial state
     await page.evaluate(() => localStorage.clear())
     await page.reload()
-    await page.waitForLoadState('networkidle')
+    await expect(page.getByTestId('time-input-seconds')).toBeVisible()
   })
 
   test('single click on + button increments by exactly 1', async ({ page }) => {
