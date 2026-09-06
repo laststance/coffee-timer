@@ -45,6 +45,7 @@ accounts; those accounts use `local:credential` in Better Auth 1.7.2.
 ```sql
 BEGIN;
 ALTER TABLE account ADD COLUMN IF NOT EXISTS issuer text;
+ALTER TABLE account ALTER COLUMN issuer DROP NOT NULL;
 UPDATE account SET issuer = 'local:credential'
 WHERE provider_id = 'credential' AND issuer IS NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS account_issuer_account_id_uidx
