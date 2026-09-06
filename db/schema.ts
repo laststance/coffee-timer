@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core'
 
 // ─── Better Auth tables ───────────────────────────────────────────
 
@@ -25,23 +32,34 @@ export const session = pgTable('session', {
     .references(() => user.id, { onDelete: 'cascade' }),
 })
 
-export const account = pgTable('account', {
-  id: text('id').primaryKey(),
-  accountId: text('account_id').notNull(),
-  providerId: text('provider_id').notNull(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  accessToken: text('access_token'),
-  refreshToken: text('refresh_token'),
-  idToken: text('id_token'),
-  accessTokenExpiresAt: timestamp('access_token_expires_at'),
-  refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
-  scope: text('scope'),
-  password: text('password'),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-})
+export const account = pgTable(
+  'account',
+  {
+    id: text('id').primaryKey(),
+    // Better Auth 1.7.2 writes issuer; nullable keeps accounts compatible with 1.7.3.
+    issuer: text('issuer'),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+  },
+  (table) => [
+    uniqueIndex('account_issuer_account_id_uidx').on(
+      table.issuer,
+      table.accountId,
+    ),
+  ],
+)
 
 export const verification = pgTable('verification', {
   id: text('id').primaryKey(),

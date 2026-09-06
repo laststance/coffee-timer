@@ -68,7 +68,9 @@
     "signingUp": "Signing up...",
     "myPage": "My Page",
     "signInError": "Invalid email or password",
-    "signUpError": "Sign up failed. Please try again."
+    "signUpError": "Sign up failed. Please try again.",
+    "networkError": "Unable to connect. Check your connection and try again.",
+    "serverError": "Authentication is temporarily unavailable. Please try again."
   },
   "MyPage": {
     "title": "My Page",

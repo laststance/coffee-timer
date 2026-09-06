@@ -1,57 +1,31 @@
 'use client'
 
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
-import { useRouter } from '@/i18n/navigation'
-import { authClient } from '@/lib/auth-client'
+import { useEmailAuthForm } from '@/lib/hooks/useEmailAuthForm'
 import { useMounted } from '@/lib/hooks/useMounted'
 import { GlassPanel } from '@/components/ui/GlassPanel'
 import { Link } from '@/i18n/navigation'
 
 /**
- * SignUpForm - Email/password registration form with theme-aware styling.
- * Supports both original and Liquid Glass theme variants.
- *
+ * Renders theme-aware account creation with retryable submissions through {@link useEmailAuthForm}.
+ * @returns The localized registration form for the sign-up page.
  * @example
  * <SignUpForm />
  */
 export const SignUpForm = memo(function SignUpForm() {
   const t = useTranslations('Auth')
   const { resolvedTheme } = useTheme()
-  const router = useRouter()
   const mounted = useMounted()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isPending, setIsPending] = useState(false)
+  const { fields, setFields, error, isPending, submitAction } =
+    useEmailAuthForm('sign-up')
 
   const isLiquidGlass =
     mounted && (resolvedTheme?.startsWith('liquid-glass') ?? false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsPending(true)
-
-    await authClient.signUp.email(
-      { name, email, password },
-      {
-        onSuccess: () => {
-          router.push('/')
-          router.refresh()
-        },
-        onError: (ctx) => {
-          setError(ctx.error?.message ?? t('signUpError'))
-          setIsPending(false)
-        },
-      },
-    )
-  }
-
   const formContent = (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form action={submitAction} className="space-y-6">
       <h1 className="text-2xl font-bold text-text-primary text-center">
         {t('signUp')}
       </h1>
@@ -73,8 +47,10 @@ export const SignUpForm = memo(function SignUpForm() {
           <input
             id="name"
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={fields.name}
+            onChange={(event) =>
+              setFields({ ...fields, name: event.target.value })
+            }
             required
             autoComplete="name"
             className="w-full rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-text-primary placeholder:text-text-secondary/50 focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green/20 transition-colors"
@@ -91,8 +67,10 @@ export const SignUpForm = memo(function SignUpForm() {
           <input
             id="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={fields.email}
+            onChange={(event) =>
+              setFields({ ...fields, email: event.target.value })
+            }
             required
             autoComplete="email"
             className="w-full rounded-lg border-2 border-bg-secondary bg-bg-primary px-4 py-3 text-text-primary placeholder:text-text-secondary/50 focus:border-primary-green focus:outline-none focus:ring-2 focus:ring-primary-green/20 transition-colors"
@@ -109,8 +87,10 @@ export const SignUpForm = memo(function SignUpForm() {
           <input
             id="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={fields.password}
+            onChange={(event) =>
+              setFields({ ...fields, password: event.target.value })
+            }
             required
             autoComplete="new-password"
             minLength={8}

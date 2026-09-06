@@ -40,6 +40,21 @@ pnpm start
 pnpm e2e
 ```
 
+## Authentication setup
+
+Account creation requires PostgreSQL and the server-only `DATABASE_URL`,
+`BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL` variables documented in
+[.env.example](./.env.example). The browser sends authentication requests to the
+current site's `/api/auth` endpoint; `NEXT_PUBLIC_APP_URL` is not required.
+
+For local authentication, copy `.env.example` to `.env`, generate a secret with
+`openssl rand -base64 32`, run `pnpm db:start`, and initialize an empty database
+with `pnpm db:migrate`. Existing databases created with `db:push` need the upgrade
+procedure in [Authentication deployment](./docs/authentication.md).
+
+See [Authentication deployment](./docs/authentication.md) for production setup,
+schema compatibility, and the isolated authentication tests.
+
 ## Tech Stack
 
 **Core Framework:**
