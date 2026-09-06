@@ -1,0 +1,60 @@
+name: Authentication E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: authentication-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  auth-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: coffee_timer_test
+          POSTGRES_PASSWORD: coffee_timer_test
+          POSTGRES_DB: coffee_timer_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U coffee_timer_test -d coffee_timer_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://coffee_timer_test:coffee_timer_test@localhost:5432/coffee_timer_test
+      BETTER_AUTH_URL: http://localhost:3009
+      AUTH_E2E: 'true'
+      NEXT_PUBLIC_METICULOUS_PROJECT_ID: ''
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: pnpm/action-setup@9fd676a19091d4595eefd76e4bd31c97133911f1 # v4.2.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Generate an isolated test signing secret
+        run: |
+          auth_test_secret=$(openssl rand -base64 32)
+          echo "::add-mask::$auth_test_secret"
+          echo "BETTER_AUTH_SECRET=$auth_test_secret" >> "$GITHUB_ENV"
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Migrate the empty test database and verify repeat application
+        run: |
+          pnpm db:migrate
+          pnpm db:migrate
+      - run: pnpm build
+      - name: Exercise real authentication and network recovery
+        run: pnpm exec playwright test e2e/auth-lifecycle.spec.ts e2e/auth-recovery.spec.ts --project="Desktop Chrome" --workers=1
