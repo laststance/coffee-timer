@@ -62,7 +62,7 @@
     "@types/react-dom": "^19.2.7",
     "axe-core": "^4.13.0",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^10.10.0",
+    "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.4",
     "espree": "^11.2.0",
     "husky": "^9.1.7",
